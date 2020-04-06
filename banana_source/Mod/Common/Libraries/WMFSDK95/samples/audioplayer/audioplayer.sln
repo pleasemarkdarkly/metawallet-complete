@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioPlayer", "audioplayer.vcproj", "{74852E35-BD7F-4AF8-8051-8CBB9B9CDD06}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{74852E35-BD7F-4AF8-8051-8CBB9B9CDD06}.Debug.ActiveCfg = Debug|Win32
+		{74852E35-BD7F-4AF8-8051-8CBB9B9CDD06}.Debug.Build.0 = Debug|Win32
+		{74852E35-BD7F-4AF8-8051-8CBB9B9CDD06}.Release.ActiveCfg = Release|Win32
+		{74852E35-BD7F-4AF8-8051-8CBB9B9CDD06}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,1 @@
+This directory contains executables for samples shipped with Corona. All executables were RELEASE built under VC6.

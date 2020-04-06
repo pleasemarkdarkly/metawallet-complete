@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<!-- DTD for AlertDialog_1.2, Dec 16, 2004 -->
+<!--
+    Revisions:
+    Dec 16, 2004 - Added Subtype attribute to AlertDialog element. Client apps can
+    use this to modify the appearance of their GUI representation.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	targetNamespace="urn:ConvertedDTDs" xmlns="urn:ConvertedDTDs">
+	<!-- ID is a decimal representation of a 32-bit number. It is unique for each dialog. -->
+	<xs:element name="AlertDialog" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="Type">
+					<xs:attribute name="ServerId" use="required" />
+					<xs:attribute name="Title" use="required" />
+					<xs:attribute name="Message" use="required" />
+					<xs:attribute name="ID" use="required" />
+					<xs:attribute name="Subtype" default="None">
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="ManualLoad" />
+								<xs:enumeration value="LoaderDoor" />
+								<xs:enumeration value="None" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Type">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="OneButton" />
+				<xs:element ref="TwoButton" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OneButton">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TwoButton">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Left" />
+				<xs:element ref="Right" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Left">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Right">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="Type">
+		<xs:sequence>
+			<xs:element ref="Type" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

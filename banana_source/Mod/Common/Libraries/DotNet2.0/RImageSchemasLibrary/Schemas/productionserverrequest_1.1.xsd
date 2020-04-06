@@ -1,0 +1,1181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD for ProductionServerRequest, Mar 14, 2005 -->
+<!--
+    Revisions:
+    Rev 1.1:
+      Jul 13, 2004 D.B. - Added ClearSessionLog element.
+      Jul 14, 2004 D.B. - Added GetUnlockingCodes & SetActivationCodes elements.
+      Aug  3, 2004 D.D. - Added TakeOrdersWithLabelWithoutPrinter and ErrorOnLowInkLevel
+         elements in the Printing Parameters group. Added MediaCodes element.
+      Sep 17, 2004 Burns - Added DVDR-DL and COMBO to the AutoloaderSettings:MediaType enumeration.
+         Added DVDR-DLInputOnly to the AutoloaderSettings:BinSetting enumeration.
+      Sep 28, 2004 Burns - Added ClearAllCodes element to MediaCodes element.
+      Jan 14, 2005 Burns - Added new values to the AutoloaderSettings:MediaType enumeration.
+        Added new values to the AutoloaderSettings:BinSetting enumeration.
+      Feb  7, 2005 Burns - Added MaxDVDRecordingSpeed to Recording group.
+      Feb 21, 2005 Burns - Added Flag attribute to SetDialogAction element.
+      Mar 11, 2005 Burns - Added AutoRespondOnStartup sub-element to the KioskMode element.
+      Mar 14, 2005 Burns - Added some notes for the Kiosk Server Mode group.
+-->
+<!-- Each of the elements of the root element 'ProductionServerRequest' represents a single request -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ProductionServerRequest" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="GetServerStatus" />
+				<xs:element ref="GetParameterSettings" />
+				<xs:element ref="GetOrderList" />
+				<xs:element ref="SetServerPassword" />
+				<xs:element ref="VerifyServerPassword" />
+				<xs:element ref="CancelOrder" />
+				<xs:element ref="ChangeOrder" />
+				<xs:element ref="EnableDevice" />
+				<xs:element ref="ResetInputBins" />
+				<xs:element ref="SetDialogAction" />
+				<xs:element ref="GetSessionLog" />
+				<xs:element ref="ClearSessionLog" />
+				<xs:element ref="SetParameter" />
+				<xs:element ref="PauseServer" />
+				<xs:element ref="ResumeServer" />
+				<xs:element ref="StopServer" />
+				<xs:element ref="FlashUpload" />
+				<xs:element ref="GetUnlockingCodes" />
+				<xs:element ref="SetActivationCodes" />
+			</xs:choice>
+			<xs:attribute name="ServerId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Each of the elements for Server requests are covered below -->
+	<!-- Whereever a Server password is shown in a request element, the password is required if the password has been set -->
+	<!-- up at the Server. Use the 'GetServerStatus' request to obtain whether the password is set or not -->
+	<!-- The returned elements mention below are covered in the current ProductionServerReply.dtd file -->
+	<!---->
+	<!--  The 'GetServerStatus' causes a 'ServerStatus' element to be returned in the Server's response -->
+	<xs:element name="GetServerStatus">
+		<xs:complexType>
+			<xs:attribute name="GetCommandLineSwitches" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="GetAutoloaderStatus" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="GetActivationInfo" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The switches control the Server software to operate in modes that is mainly used for diagnostics -->
+	<!-- The 'GetParameterSettings' request obtains all of the Production Server's parameter settings. -->
+	<!-- 	The 'ProductionParameterSettings' element is returned in the Server's response -->
+	<xs:element name="GetParameterSettings">
+		<xs:complexType />
+	</xs:element>
+	<!---->
+	<!-- The 'GetOrderList' request obtains a listing of all the active jobs at the Server. -->
+	<!-- 	The 'OrderList' element is returned in the Server's response -->
+	<xs:element name="GetOrderList">
+		<xs:complexType />
+	</xs:element>
+	<!---->
+	<!-- *********** DEFINITION ****************** -->
+	<xs:element name="ServerPassword">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<!--  The length of the password and the 'EncodeNumber' number range from 0 to 20 -->
+	<!--  The 'EncodeNumber' is a selected number that is used to encrypt orginal password. Refer to specification for Status and Control protocol for details. -->
+	<!-- ***************************************** -->
+	<!---->
+	<!-- In the 'SetServerPassword' request, the 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="SetServerPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="OldPassword" />
+				<xs:element ref="NewPassword" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- *********  DEFINITIONS ***************** -->
+	<xs:element name="OldPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerPassword" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="NewPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerPassword1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- ******************************************* -->
+	<!---->
+	<!-- For the 'VerifyServerPassword' request, the 'AckOnly' element is returned in the Server's response -->
+	<!-- If the password element is not the current user password, then the response will contain an error code -->
+	<xs:element name="VerifyServerPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerPassword2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<!--  For the 'CancelOrder' request, the 'AckOnly' element is returned in the Server's response -->
+	<!-- The ServerPassword is required if the password is set and the ClientId attribute below does not match the id of client making the request -->
+	<xs:element name="CancelOrder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword3" />
+			</xs:sequence>
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="AbortRecordingsInProcess" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The 'ChangeOrder' request is used to suspend, resume or change the quantity of discs to produce for an order -->
+	<!-- 	The 'AckOnly' element is returned in the Server's response to this request -->
+	<!-- The ServerPassword is required for 'ChangeOrder' if the password is set and the ClientId attribute below does not match the client making the request -->
+	<xs:element name="ChangeOrder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword4" />
+				<xs:choice>
+					<xs:element ref="SuspendOrder" />
+					<xs:element ref="ResumeOrder" />
+					<xs:element ref="Quantity" />
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Suspending an order causes discs in recording to complete, pausing the order until it is resumed -->
+	<xs:element name="SuspendOrder">
+		<xs:complexType />
+	</xs:element>
+	<xs:element name="ResumeOrder">
+		<xs:complexType />
+	</xs:element>
+	<xs:element name="Quantity">
+		<xs:complexType>
+			<xs:attribute name="NumberOfDiscs" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The number of discs must be in the range of 1 to 30000 -->
+	<!-- The 'EnableDevice' request is used to re-enable either an autoloader, printer, or a recorder that is disabled -->
+	<!-- The client must always specify which loader to run this command on -->
+	<!-- Note that this request will normally return immediately with a success -->
+	<!-- 	The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="EnableDevice">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword5" />
+				<xs:choice>
+					<xs:element ref="Autoloader" />
+					<xs:element ref="Recorder" />
+					<xs:element ref="Printer" />
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="LoaderNumber" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Autoloader numbering begins with '1' -->
+	<xs:element name="Autoloader">
+		<xs:complexType />
+	</xs:element>
+	<xs:element name="Recorder">
+		<xs:complexType>
+			<xs:attribute name="Number" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!--  Recorder numbering begins with '1' -->
+	<xs:element name="Printer">
+		<xs:complexType>
+			<xs:attribute name="Number" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!--  Printer numbering begins with '1' -->
+	<!---->
+	<!--  The reset bin operation applies only to autoloaders that have at least one bin set up to be both input or output. -->
+	<!-- Note that this request will return immediately with a success -->
+	<!-- 	The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="ResetInputBins">
+		<xs:complexType>
+			<xs:attribute name="LoaderNumber" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Autoloader numbering begins with '1' -->
+	<!-- The 'SetDialogAction' request is used to make a selection in a Server dialog. Each server dialog will have a -->
+	<!-- unique Id associated with it. Client must identify the dialog by the id contained in the dialog message -->
+	<!-- 	The 'DialogAction' element is returned in the Server's response -->
+	<xs:element name="SetDialogAction">
+		<xs:complexType>
+			<xs:attribute name="DialogId" use="required" />
+			<xs:attribute name="Button" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="First" />
+						<xs:enumeration value="Second" />
+						<xs:enumeration value="Third" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Flag" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- 'First' refers to 'Left' button on alert dialog or 'Top' button of error dialog -->
+	<!--  'Second' refers to 'Right' button on alert dialog or 'Middle' button of error dialog -->
+	<!--  'Third' refers to 'Bottom' button of error dialog -->
+	<!--  The 'GetSessionLog' is used to obtained the most recent log messages generated by the Server. -->
+	<!-- This command requests the most recently logged events. The actual number of returned events may be less -->
+	<!-- than the requested number  if that many have not been logged yet. -->
+	<!-- 	The 'SessionLog' element is returned in the Server's response -->
+	<xs:element name="GetSessionLog">
+		<xs:complexType>
+			<xs:attribute name="NumberEvents" />
+		</xs:complexType>
+	</xs:element>
+	<!--  The 'NumberEvents' may range from 1 to 200. If it is omitted, the Server returns all of its recent events up to the maximum of 200. -->
+	<!--  The 'ClearSessionLog' request is used to remove all of the log messages generated by the Server. -->
+	<!-- This does not affect the contents of the session log file. -->
+	<xs:element name="ClearSessionLog">
+		<xs:complexType />
+	</xs:element>
+	<!---->
+	<!-- The Set parameter request is used to modify one or more parameter settings. If more than one setting is specified, -->
+	<!-- and any of the settings is invalid the entire request will fail. -->
+	<!-- 	The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="SetParameter">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword6" />
+				<xs:element maxOccurs="unbounded" ref="Setting" />
+			</xs:sequence>
+			<xs:attribute name="IgnoreReadOnly" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  If any parameter setting to modify is currently read-only at the Server and 'IgnoreReadOnly' is set to false, the -->
+	<!-- request will fail. -->
+	<!-- The Production server settings are divided into a number of groups. Each sub element of 'Setting' refers to an associated -->
+	<!-- group. -->
+	<xs:element name="Setting">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="Server" />
+				<xs:element ref="ModeSettings" />
+				<xs:element ref="Caching" />
+				<xs:element ref="Recording" />
+				<xs:element ref="Verify" />
+				<xs:element ref="Printing" />
+				<xs:element ref="AutoloaderSettings" />
+				<xs:element ref="Reading" />
+				<xs:element ref="MediaCodes" />
+				<xs:element ref="KioskMode" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<!--  **********************		Server setting group	********************************** -->
+	<xs:element name="Server">
+		<xs:complexType>
+			<xs:attribute name="Description" />
+			<xs:attribute name="OrderStatusInterval" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The 'OrderStatusInterval' is specified in seconds -->
+	<!--  **********************		Server Mode parameter group	********************************** -->
+	<!-- See Production Server Online Help and User Guide for information on the various production modes available -->
+	<xs:element name="ModeSettings">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="ServerMode" />
+				<xs:element ref="OperatingMode" />
+				<xs:element ref="UseFIFOMode" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerMode">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Attended">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Attended" />
+						<xs:enumeration value="UnAttended" />
+						<xs:enumeration value="Kiosk" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OperatingMode">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Normal">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Normal" />
+						<xs:enumeration value="BulkRead" />
+						<xs:enumeration value="JobStreaming" />
+						<xs:enumeration value="AutoBulkRead" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Server must be in 'Attended' mode before OperationMode can be set to 'JobStreaming' or 'AutoBulkRead' -->
+	<!-- Bulkreading is not permitted in the 'Kiosk' server mode. -->
+	<!-- 'UseFIFOMode' is a method of order sequencing. It is not applicable in all operating modes -->
+	<xs:element name="UseFIFOMode">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  **********************		Image Caching parameter group	********************************** -->
+	<xs:element name="Caching">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="UseStaticCaching" />
+				<xs:element ref="CacheDriveLetters" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!--  When 'static' caching is not enabled, cache is allocated as needed -->
+	<xs:element name="UseStaticCaching">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Drive letters are specified as unseparated list. e.g. "def" -->
+	<xs:element name="CacheDriveLetters">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!--  **********************		Recording parameter group	********************************** -->
+	<xs:element name="Recording">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="SimulateRecording" />
+				<xs:element ref="UseNewMediaOnly" />
+				<xs:element ref="MaxRecordingSpeed" />
+				<xs:element ref="MaxDVDRecordingSpeed" />
+				<xs:element ref="DisableISOExtentFixups" />
+				<xs:element ref="RejectNonISO" />
+				<xs:element ref="AddPostgapToISO" />
+				<xs:element ref="EnableUsing90_100MinuteCDRs" />
+				<xs:element ref="DestroyFailedRecordings" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SimulateRecording">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseNewMediaOnly">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MaxRecordingSpeed">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- To specify a recording speed, use Nx; e.g. '40x' or '48x';  Use 'Max' to set maximum speed possible for recording -->
+	<xs:element name="MaxDVDRecordingSpeed">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Specify a DVD recording speed. Valid values are '1x', '2x', '4x', '8x', '12x', '16x' or 'Max'. -->
+	<!-- The 'RejectNonISO' setting applies to Incremental multi-session orders -->
+	<xs:element name="RejectNonISO">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The 'DisableISOExtentFixups' setting applies to multi-session -->
+	<xs:element name="DisableISOExtentFixups">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The 'AddPostgapToISO' setting applies to discs or images that don't have one -->
+	<xs:element name="AddPostgapToISO">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Disabled">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Disabled" />
+						<xs:enumeration value="Images" />
+						<xs:enumeration value="Discs" />
+						<xs:enumeration value="Both" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="EnableUsing90_100MinuteCDRs">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DestroyFailedRecordings">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  **********************		Verify parameter group	********************************** -->
+	<xs:element name="Verify">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="UseVerify" />
+				<xs:element ref="Frequency" />
+				<xs:element ref="UseChecksumDLL" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseVerify">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  When setting the frequency of verify, use value n where every nth disc is verified. -->
+	<xs:element name="Frequency">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseChecksumDLL">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- For using checksum DLL, the setting is only valid when 'UseVerify' parameter and the setting for an available DLL are both true -->
+	<!-- 	The setting 'IsChecksumReady', obtained from 'GetParameterSettings' (see ProductionServerReply.DTD) when true indicates that the DLL is available -->
+	<!-- 	When set to "true", new media must be used -->
+	<!--  **********************		Printing parameter group	********************************** -->
+	<xs:element name="Printing">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="SimulatePrinting" />
+				<xs:element ref="RejectPattern" />
+				<xs:element ref="TakeOrdersWithLabelWithoutPrinter" />
+				<xs:element ref="ErrorOnLowInkLevel" />
+				<xs:element ref="LowInkThresholdPercent" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SimulatePrinting">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RejectPattern">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Disabled">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Disabled" />
+						<xs:enumeration value="AllRejectedDiscs" />
+						<xs:enumeration value="RecordingFailuresOnly" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TakeOrdersWithLabelWithoutPrinter">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ErrorOnLowInkLevel">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LowInkThresholdPercent">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!--  **********************		Autoloader parameter group	********************************** -->
+	<xs:element name="AutoloaderSettings">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element maxOccurs="unbounded" ref="BinSetting" />
+				<xs:element ref="MailslotSetting" />
+				<xs:element ref="MediaSize" />
+				<xs:element ref="MediaType" />
+			</xs:choice>
+			<xs:attribute name="LoaderNumber" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Autoloader numbering begins with '1' -->
+	<xs:element name="BinSetting">
+		<xs:complexType>
+			<xs:attribute name="BinNumber" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="4" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Value" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Input" />
+						<xs:enumeration value="InputOutput" />
+						<xs:enumeration value="CDRInputOnly" />
+						<xs:enumeration value="DVDRInputOnly" />
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="OutputReject" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="Collate" />
+						<xs:enumeration value="ReservedInput" />
+						<xs:enumeration value="DVDR-DLInputOnly" />
+						<xs:enumeration value="SOQ_CDRInputOnly" />
+						<xs:enumeration value="SOQ_DVDRInputOnly" />
+						<xs:enumeration value="SOQ_DVDR-DLInputOnly" />
+						<xs:enumeration value="DVDR-HDInputOnly" />
+						<xs:enumeration value="DVDR-BDInputOnly" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MailslotSetting">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="OutputReject" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="ReservedOutput" />
+						<xs:enumeration value="DoNotUse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MediaSize">
+		<xs:complexType>
+			<xs:attribute name="Value" default="120mm">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="120mm" />
+						<xs:enumeration value="80mm" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- If another 'MediaSize' is use, as found in 'GetParameterSettings', setting this to one of the above values will prevent -->
+	<!-- settings this back to the original value -->
+	<!--
+        The "BOTH" setting for MediaType is retained for backward compatibility. It means CDR and DVDR.
+        COMBO should be used in newer applications.
+    -->
+	<xs:element name="MediaType">
+		<xs:complexType>
+			<xs:attribute name="Value" default="CDR">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDR" />
+						<xs:enumeration value="DVDR" />
+						<xs:enumeration value="BOTH" />
+						<xs:enumeration value="DVDR-DL" />
+						<xs:enumeration value="COMBO" />
+						<xs:enumeration value="SOQ_CDR" />
+						<xs:enumeration value="SOQ_DVDR" />
+						<xs:enumeration value="SOQ_DVDR-DL" />
+						<xs:enumeration value="DVDR-HD" />
+						<xs:enumeration value="DVDR-BD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  **********************		Reading Discs parameter group	********************************** -->
+	<xs:element name="Reading">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="BarcodePort" />
+				<xs:element ref="BarcodeAngle" />
+				<xs:element ref="UseBarcodeIndex" />
+				<xs:element ref="AutoBulkRead" />
+				<xs:element ref="AudioReadSpeed" />
+				<xs:element ref="PreferredReader" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BarcodePort">
+		<xs:complexType>
+			<xs:attribute name="Value" default="None">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="None" />
+						<xs:enumeration value="COM1" />
+						<xs:enumeration value="COM2" />
+						<xs:enumeration value="COM3" />
+						<xs:enumeration value="COM4" />
+						<xs:enumeration value="COM5" />
+						<xs:enumeration value="COM6" />
+						<xs:enumeration value="COM7" />
+						<xs:enumeration value="COM8" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The barcode rotation angle is specified as the number of .25 degree increments for offsets ranging from 0 to 359.75 degrees -->
+	<!-- The range of values is 0 - 1439 -->
+	<xs:element name="UseBarcodeIndex">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AutoBulkRead">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="BaseFolderForImages" />
+				<xs:element ref="UseVolumeIDAsFolderName" />
+				<xs:element ref="UseBarcodeAsFolderName" />
+				<xs:element ref="ExtractISOImagesToFoldersAndFiles" />
+				<xs:element ref="ImageTypeForAudioTracks" />
+				<xs:element ref="UseISRCAsFilenameForAudioTracks" />
+				<xs:element ref="PutFailuresToRejectBin" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BaseFolderForImages">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseVolumeIDAsFolderName">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseBarcodeAsFolderName">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ExtractISOImagesToFoldersAndFiles">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ImageTypeForAudioTracks">
+		<xs:complexType>
+			<xs:attribute name="Value" default="PCM">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="PCM" />
+						<xs:enumeration value="WAV" />
+						<xs:enumeration value="DDP" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseISRCAsFilenameForAudioTracks">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PutFailuresToRejectBin">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AudioReadSpeed">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Max">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1x" />
+						<xs:enumeration value="2x" />
+						<xs:enumeration value="4x" />
+						<xs:enumeration value="8x" />
+						<xs:enumeration value="Max" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PreferredReader">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Recorders">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDDVD-ROMDrive" />
+						<xs:enumeration value="Recorders" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  ********************** MediaCodes group ********************************** -->
+	<xs:element name="MediaCodes">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="UseMediaCodes" />
+				<xs:element ref="MediaCode" />
+				<xs:element ref="ClearAllCodes" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseMediaCodes">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MediaCode">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- A MediaCode Value has the form "99m55s60f" -->
+	<!--
+        NOTE: All required codes must be sent in a single request. PS will clear its current
+        list when processing this request. PS currently saves up to 8 separate codes.
+    -->
+	<xs:element name="ClearAllCodes">
+		<xs:complexType />
+	</xs:element>
+	<!-- Clears the list of MediaCode values. -->
+	<!--  ********************** Kiosk Server Mode group	********************************** -->
+	<!--
+        Notes:
+        RecoverOrders is deprecated - it has no effect on EPS operation.
+        AutoRespondOnStartup and RunNoPrinter work togather as follows:
+          Kiosk Mode is enabled and one of the autoloaders detects the presence of
+          a printer but fails to 'attach' it:
+            If AutoRespondOnStartup is 'false' an alert dialog is generated and EPS
+            continues to run.
+            If AutoRespondOnStartup is 'true' and RunNoPrinter is 'true' EPS continues
+            to run, but no alert dialog is generated.
+            If AutoRespondOnStartup is 'true' and RunNoPrinter is 'false' no alert
+            dialog is generated and EPS terminates.
+    -->
+	<xs:element name="KioskMode">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="RecoverOrders" />
+				<xs:element ref="RunNoPrinter" />
+				<xs:element ref="AutoloaderRecovery" />
+				<xs:element ref="PrinterRecovery" />
+				<xs:element ref="AutoRespondOnStartup" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RecoverOrders">
+		<xs:complexType>
+			<xs:attribute name="Value" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RunNoPrinter">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AutoloaderRecovery">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Retry">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Retry" />
+						<xs:enumeration value="Exit" />
+						<xs:enumeration value="Disable" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PrinterRecovery">
+		<xs:complexType>
+			<xs:attribute name="Value" default="Retry">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Retry" />
+						<xs:enumeration value="Exit" />
+						<xs:enumeration value="Disable" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AutoRespondOnStartup">
+		<xs:complexType>
+			<xs:attribute name="Value" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- This is the end of the 'SetParameter' section -->
+	<!---->
+	<!--  Pausing the server stops order scanning; The request normally returns immediately with an 'IN_PROCESS' status -->
+	<!-- 	The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="PauseServer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword7" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<!-- Resuming the server causes order scanning to resume; The request normally returns immediately with an 'IN_PROCESS' status -->
+	<!-- 	The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="ResumeServer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword8" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<!-- Stopping Server stops order scanning, ends order processing, and shuts down the Server. The request normally returns immediately with an 'IN_PROCESS' status -->
+	<!-- The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="StopServer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword9" />
+			</xs:sequence>
+			<xs:attribute name="AbortRecordingsInProcess" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--  This attribute when set to 'true' causes all recorders connected to the Server to stop recording immediately. Current recordings are aborted. -->
+	<!-- The 'FlashUpload' request is used to update device firmware.  The firmware file is specified in the 'Filepath' attribute -->
+	<!-- 	    Note that ALL of the devices of the specified type, e.g. 'Recorder', are updated with this command.  This is a synchronous command, but client must wait a while for the operation to complete -->
+	<!--  The full filepath to the flash file always needs to be specified -->
+	<!-- 	    The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="FlashUpload">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword10" />
+			</xs:sequence>
+			<xs:attribute name="Device" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Autoloader" />
+						<xs:enumeration value="Recorder" />
+						<xs:enumeration value="Printer" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Filepath" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The 'GetUnlockingCodes' & 'SetActivationCodes' requests are used for remote license activation. -->
+	<xs:element name="GetUnlockingCodes">
+		<xs:complexType>
+			<xs:attribute name="Feature" default="Base">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Base" />
+						<xs:enumeration value="Smarte-CD" />
+						<xs:enumeration value="RawMode" />
+						<xs:enumeration value="EciVCD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SetActivationCodes">
+		<xs:complexType>
+			<xs:attribute name="Feature" default="Base">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Base" />
+						<xs:enumeration value="Smarte-CD" />
+						<xs:enumeration value="RawMode" />
+						<xs:enumeration value="EciVCD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Code1" use="required" />
+			<xs:attribute name="Code2" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BarcodeAngle">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword1">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword2">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword3">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword4">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword5">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword6">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword7">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword8">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword9">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword10">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

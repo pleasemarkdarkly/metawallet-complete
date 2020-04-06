@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by M Nohr (Rimage) -->
+<!-- DTD for ImageServerRequest_1.0, Nov 21, 2003 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ImageServerRequest" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="GetServerStatus" />
+				<xs:element ref="GetParameterSettings" />
+				<xs:element ref="GetOrderList" />
+				<xs:element ref="SetServerPassword" />
+				<xs:element ref="VerifyServerPassword" />
+				<xs:element ref="CancelOrder" />
+				<xs:element ref="GetSessionLog" />
+				<xs:element ref="SetParameter" />
+				<xs:element ref="PauseServer" />
+				<xs:element ref="ResumeServer" />
+				<xs:element ref="StopServer" />
+			</xs:choice>
+			<xs:attribute name="ServerId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The following elements refer to the actual commands the server may execute -->
+	<!-- The 'ServerStatus' element is returned in the Server's response -->
+	<xs:element name="GetServerStatus">
+		<xs:complexType />
+	</xs:element>
+	<!-- The 'ImageParameterSettings' element is returned in the Server's response -->
+	<xs:element name="GetParameterSettings">
+		<xs:complexType />
+	</xs:element>
+	<!-- The 'OrderList' element is returned in the Server's response.  The current IS only works on one order at a time, so this list will have 0 or 1 elements returned. -->
+	<xs:element name="GetOrderList">
+		<xs:complexType />
+	</xs:element>
+	<!-- The 'EncodeNumber' is a selected number that is used to encrypt orginal password. Refer to specification for Status and Control protocol for details. -->
+	<xs:element name="ServerPassword">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Both the length and encode numbers range from 0 to 20 -->
+	<!-- This command simply verfies that the password is correct.  If it is, an ack with no error will be returned -->
+	<xs:element name="VerifyServerPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerPassword7" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- This command sets a new password -->
+	<!-- The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="SetServerPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="OldPassword" />
+				<xs:element ref="NewPassword" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OldPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerPassword1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="NewPassword">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerPassword2" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- This command is used to cancel an order that is in process -->
+	<!-- The ServerPassword is required for 'CancelOrder' if the password is set and the ClientId attribute below does not match the client making the request -->
+	<xs:element name="CancelOrder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword6" />
+			</xs:sequence>
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- This command returns the session log entries in the server's response -->
+	<!-- The 'NumberEvents' may range from 1 to 200 -->
+	<!-- The actual number of returned events may be less than the requested number if that many have not been logged yet. -->
+	<xs:element name="GetSessionLog">
+		<xs:complexType>
+			<xs:attribute name="NumberEvents" />
+		</xs:complexType>
+	</xs:element>
+	<!-- This command changes some server settings -->
+	<xs:element name="SetParameter">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword3" />
+				<xs:element ref="Setting" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Setting" type="Server" />
+	<xs:complexType name="Server">
+		<xs:sequence>
+			<xs:element ref="Server" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Server">
+		<xs:complexType>
+			<xs:attribute name="Description" />
+			<xs:attribute name="OrderStatusInterval" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The 'OrderStatusInterval' is specified in seconds -->
+	<!--  Pausing Server stops order scanning; The request normally returns immediately with an 'IN_PROCESS' status -->
+	<!-- The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="PauseServer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword4" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Resuming Server causes order scanning to resume; The request normally returns immediately with an 'IN_PROCESS' status -->
+	<!-- The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="ResumeServer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Stopping Server stops order scanning, ends order processing, shuts down the Server. The request normally returns immediately with an 'IN_PROCESS' status -->
+	<!-- The 'AckOnly' element is returned in the Server's response -->
+	<xs:element name="StopServer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ServerPassword5" />
+			</xs:sequence>
+			<xs:attribute name="CancelOrdersInProcess" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword1">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword2">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword3">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword4">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword5">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword6">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerPassword7">
+		<xs:complexType>
+			<xs:attribute name="EncodedPassword" use="required" />
+			<xs:attribute name="EncodeNumber" default="7" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

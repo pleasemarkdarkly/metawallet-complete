@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- edited with XML Spy v4.1 U (http://www.xmlspy.com) by Tom Serface (Rimage) -->
+<!-- DTD for Label Template File Version 1.0.0.0, Jul 26, 2002 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="LabelTemplate" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="LabelInfo" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LabelInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="MergeFields" />
+			</xs:sequence>
+			<xs:attribute name="Description" use="required" />
+			<xs:attribute name="LabelFilename" use="required" />
+			<xs:attribute name="BitmapFilename" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Merge fields each have a name (prompt) can have a default value, and must have an x and y relative location on the label. -->
+	<!-- FieldName will use Field1...FieldN if not supplied. -->
+	<xs:element name="MergeFields">
+		<xs:complexType>
+			<xs:attribute name="FieldName" />
+			<xs:attribute name="FieldData" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- edited with XML Spy v4.1 U (http://www.xmlspy.com) by Dave Raskin (Rimage) -->
+<!-- DTD for ImageServerConfiguration Version 1.0.0.0, Jan 22, 2002 -->
+<!--
+    Revisions
+    Jan 14, 2004 Nohr - Added OSVersion to ServerInfo.
+    Jan 28, 2004 Nohr - Added SupportsSCP to ServerInfo.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ImageServerConfiguration" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerInfo" />
+				<xs:element ref="Options" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerInfo">
+		<xs:complexType>
+			<xs:attribute name="ID" use="required" />
+			<xs:attribute name="SoftwareVersion" use="required" />
+			<xs:attribute name="Description" />
+			<xs:attribute name="Hostname" use="required" />
+			<xs:attribute name="Cluster" use="required" />
+			<xs:attribute name="IsService" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="IsPasswordSet" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SystemFolder" use="required" />
+			<xs:attribute name="OSVersion" use="required" />
+			<xs:attribute name="SupportsSCP" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Overwrite allows existing image files to be overwritten with new ones, otherwise it is an error -->
+	<!-- WaitForSpace will cause the imager to wait for the image size plus the amount of free space (Mbytes) to be available before the image is made -->
+	<!-- If WaitForSpace is not specified the imager will give an error instead of waiting if there isn't enough space for the image file -->
+	<xs:element name="Options">
+		<xs:complexType>
+			<xs:attribute name="Overwrite" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="WaitForSpace" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,16 @@
+C:\Work\Mod\Common\MOD.Test\bin\Debug\MOD.Test.dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\MOD.Test.pdb
+C:\Work\Mod\Common\MOD.Test\bin\Debug\MOD.Data.dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\MOD.Exceptions (VS2005).dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Interop.SQLDMO.dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.xml
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.xml
+C:\Work\Mod\Common\MOD.Test\bin\Debug\MOD.Data.pdb
+C:\Work\Mod\Common\MOD.Test\bin\Debug\Microsoft.Practices.ObjectBuilder.xml
+C:\Work\Mod\Common\MOD.Test\bin\Debug\MOD.Exceptions (VS2005).pdb
+C:\Work\Mod\Common\MOD.Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mod\Common\MOD.Test\obj\Debug\MOD.Test.dll
+C:\Work\Mod\Common\MOD.Test\obj\Debug\MOD.Test.pdb

@@ -1,0 +1,14 @@
+C:\Work\Mod\Common\MOD.Data\bin\Debug\MOD.Data.dll
+C:\Work\Mod\Common\MOD.Data\bin\Debug\MOD.Data.pdb
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.dll
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.xml
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.xml
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Microsoft.Practices.ObjectBuilder.xml
+C:\Work\Mod\Common\MOD.Data\bin\Debug\Interop.SQLDMO.dll
+C:\Work\Mod\Common\MOD.Data\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mod\Common\MOD.Data\obj\Debug\Interop.SQLDMO.dll
+C:\Work\Mod\Common\MOD.Data\obj\Debug\MOD.Data (VS2005).csproj.ResolveComReference.cache
+C:\Work\Mod\Common\MOD.Data\obj\Debug\MOD.Data.dll
+C:\Work\Mod\Common\MOD.Data\obj\Debug\MOD.Data.pdb

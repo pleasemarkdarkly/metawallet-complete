@@ -1,0 +1,1 @@
+This file originally found in a SQL Server 2005 installation underneath the "80\Tools\Binn" directory.

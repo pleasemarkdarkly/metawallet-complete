@@ -1,0 +1,11 @@
+//=======================================================
+
+const WCHAR DRM_LASignatureRootCert[] = L"AAEAADgAAABjfu*d54xPJBFVvwYRZP1ucX2ID*8plpX1EHpcu5EAjHIvkOsD5CIRvS3wtmfOVH9NVDxk2e6TQp7NDnTH8vOQmeXHipAtCmGkCvzq3agEDWNjDB8AAABjAAAAAQAAAAE=";
+
+const WCHAR DRM_LASignatureLicSrvCert[] = L"AAEAADgAAADVP!PcgfkZXUlG8cYrU0mdrH3eT7GgznzWgdzgjYSvS0Jc*0s9P0BWIo7cPprXFgyK67PHy4hj5oHeljF60N*7PoK0tA2oqmaCKKiYl9aOEgAAAAAAAAAAAAAAAAAAAAA=";
+
+const WCHAR DRM_LASignatureCert[] = L"AAEAADgAAADWgijHw19x7BqxEkXQdAeGnle7Z8XryrglTphewxzkxzWA1GN28QEJPa7lt!7kwFKpB*LumpeqT9QNBEIhvpmO*P7qMpvXdJ57BYXl1P8paQAAAAAAAAAAAAAAAAAAAAA=";
+
+const WCHAR DRM_LASignaturePrivKey[] = L"CVO0BPi9ogX8OLeesVhSSHufkEY=";
+
+//=======================================================

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD for ProductionOrderStatus_1.2, Oct 1, 2004 -->
+<!--
+    Revisions:
+          Feb 24, 2004 Burns - Added OriginalOrder attribute to ProductionOrderStatus.
+          Feb 26, 2004 Burns - Changed OriginalOrder from #REQUIRED to #IMPLIED, since
+    	      we are sending status for 'internal' jobs which do not have an XML order.
+          Apr 19, 2004 Burns - Added StageEx attribute to Status element
+    Rev 1.2:
+      Jul 30, 2004 Burns - Added Device element and attributes.
+      Oct  1, 2004 Burns - Added RejectMessage attribute to Device element.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ProductionOrderStatus" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Status" />
+				<xs:element ref="Timestamps" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Device" />
+			</xs:sequence>
+			<xs:attribute name="ServerId" use="required" />
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="Originator" />
+			<xs:attribute name="OriginalOrder" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The Originator is implied because it is also implied in the ProductionOrder -->
+	<!-- OriginalOrder contains the full XML text of the order -->
+	<xs:element name="Status">
+		<xs:complexType>
+			<xs:attribute name="State" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="NOT_STARTED" />
+						<xs:enumeration value="IN_PROCESS" />
+						<xs:enumeration value="COMPLETED" />
+						<xs:enumeration value="CANCELLED" />
+						<xs:enumeration value="FAILED" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Stage" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="WAITING" />
+						<xs:enumeration value="BUSY" />
+						<xs:enumeration value="DOWNLOADING" />
+						<xs:enumeration value="RECORDING" />
+						<xs:enumeration value="FIXATING" />
+						<xs:enumeration value="DESTROYING" />
+						<xs:enumeration value="PRINTING" />
+						<xs:enumeration value="MAPPING" />
+						<xs:enumeration value="READING" />
+						<xs:enumeration value="COMPLETED" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="StageEx">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="SUSPENDING" />
+						<xs:enumeration value="SUSPENDED" />
+						<xs:enumeration value="CANCELLING" />
+						<xs:enumeration value="SEGMENT" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ErrorCode" />
+			<xs:attribute name="ErrorMessage" />
+			<xs:attribute name="ActionWithError" />
+			<xs:attribute name="CopiesRequested" use="required" />
+			<xs:attribute name="CopiesCompleted" use="required" />
+			<xs:attribute name="PercentCompleted" use="required" />
+			<xs:attribute name="OutputMailslot" />
+			<xs:attribute name="BarcodeValue" />
+		</xs:complexType>
+	</xs:element>
+	<!-- ActionWithError indicates which Action element of a production order is incorrect -->
+	<!--
+        The Stage:WAITING value occurs briefly when a job is first started.
+        It may also occur for an extended period if a job looses its resources due
+            to a hardware malfunction or during a crash recovery when there may be many
+            running jobs, but not enough resources to run them all at once.
+    -->
+	<!--
+        OutputMailslot is set to the mailslot assigned by Production Server if the
+        Production Order specified 'ANY' in the OutputMailslot attribute of the
+        InOut element.
+    -->
+	<!--
+        BarcodeValue is set on completion of a Map segment of a read order if the GetBarcode
+        attribute was specified and a barcode reader existed on the transporter that
+        executed the read operation.
+    -->
+	<xs:element name="Timestamps">
+		<xs:complexType>
+			<xs:attribute name="OrderRead" use="required" />
+			<xs:attribute name="OrderCompleted" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Timestamp format = CCYY-MM-DD HH:MM:SS -->
+	<!-- The attribute names for Device were chosen to not match those used for Status. -->
+	<xs:element name="Device">
+		<xs:complexType>
+			<xs:attribute name="Identifier" use="required" />
+			<xs:attribute name="CurrentState" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="WAITING" />
+						<xs:enumeration value="DOWNLOADING" />
+						<xs:enumeration value="LOADING" />
+						<xs:enumeration value="CHECKING_DISC" />
+						<xs:enumeration value="RECORDING" />
+						<xs:enumeration value="FIXATING" />
+						<xs:enumeration value="VERIFYING" />
+						<xs:enumeration value="QUEUED_FOR_FIFO" />
+						<xs:enumeration value="UNLOADING" />
+						<xs:enumeration value="REJECTING" />
+						<xs:enumeration value="DESTROYING" />
+						<xs:enumeration value="WAITING_FOR_LABEL_RENDERING" />
+						<xs:enumeration value="PRINTING" />
+						<xs:enumeration value="MAPPING" />
+						<xs:enumeration value="READING" />
+						<xs:enumeration value="SUSPENDED" />
+						<xs:enumeration value="WAITING_FOR_NEXT_SEGMENT" />
+						<xs:enumeration value="BUSY" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PercentDone" />
+			<xs:attribute name="RejectMessage" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+<!--
+    The Identifier may be any combination of loader, recorder & cache e.g:
+    "Loader 2, Recorder 4, Cache 2".
+-->
+<!-- The RejectMessage is emitted once for a given device when a disc gets rejected. -->

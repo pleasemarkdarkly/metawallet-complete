@@ -1,0 +1,4 @@
+32,PMT
+33,PCR
+33,Video,H.264,Main Profile@Level 3,720x480,24 Hz,1000/1001,Frame,16:9
+36,Audio,MPEG-2,AAC LC,48 kHz,2ch (stereo),128 kbps,Stereo

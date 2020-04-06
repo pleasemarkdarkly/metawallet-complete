@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META content="text/html; charset=unicode" http-equiv=Content-Type><SCRIPT LANGUAGE=VBScript RUNAT="Server"> 
+
+'*@@@+++@@@@******************************************************************
+'
+' Microsoft Windows Media
+' Copyright (C) Microsoft Corporation. All rights reserved.
+'
+' IMPORTANT:  THESE SAMPLES ARE PROVIDED FOR HIGH-LEVEL REFERENCE ONLY
+'             AND SHOULD NOT BE USED IN PRODUCTION ENVIRONMENTS.
+'
+'*@@@---@@@@******************************************************************
+
+Sub Application_OnStart
+	       
+    Application("siteurl") = "xxx" 'URL for License server
+    Application("KeyID") = 	"xxx"  'for pre-delivery
+	
+    'Content Server information. In this sample, we support only one content server.        
+    Application("seed") = "xxx"
+    Application("contentserverpubkey") = "xxx"               
+    Application("contentserverprivkey") = "xxx"
+	
+    Application("ownerid")  = "Company X"
+End Sub
+</SCRIPT>

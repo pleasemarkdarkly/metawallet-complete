@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetadataEdit", "metadataedit\MetadataEdit.csproj", "{12B1E9C2-149F-48E6-AD20-4D5A412B49E5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMFSDKWrapper", "wrapper\WMFSDKWrapper.csproj", "{655F362E-A35B-4143-80F0-312A6B9C57E5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{373C680F-8409-42A3-96E9-A9DF60C0C8B8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{12B1E9C2-149F-48E6-AD20-4D5A412B49E5}.Debug.ActiveCfg = Debug|.NET
+		{12B1E9C2-149F-48E6-AD20-4D5A412B49E5}.Debug.Build.0 = Debug|.NET
+		{12B1E9C2-149F-48E6-AD20-4D5A412B49E5}.Release.ActiveCfg = Release|.NET
+		{12B1E9C2-149F-48E6-AD20-4D5A412B49E5}.Release.Build.0 = Release|.NET
+		{655F362E-A35B-4143-80F0-312A6B9C57E5}.Debug.ActiveCfg = Debug|.NET
+		{655F362E-A35B-4143-80F0-312A6B9C57E5}.Debug.Build.0 = Debug|.NET
+		{655F362E-A35B-4143-80F0-312A6B9C57E5}.Release.ActiveCfg = Release|.NET
+		{655F362E-A35B-4143-80F0-312A6B9C57E5}.Release.Build.0 = Release|.NET
+		{373C680F-8409-42A3-96E9-A9DF60C0C8B8}.Debug.ActiveCfg = Debug|.NET
+		{373C680F-8409-42A3-96E9-A9DF60C0C8B8}.Debug.Build.0 = Debug|.NET
+		{373C680F-8409-42A3-96E9-A9DF60C0C8B8}.Release.ActiveCfg = Release|.NET
+		{373C680F-8409-42A3-96E9-A9DF60C0C8B8}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

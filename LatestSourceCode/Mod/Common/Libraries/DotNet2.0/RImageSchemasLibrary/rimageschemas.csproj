@@ -1,0 +1,469 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ABC0AD66-CCD7-4BC4-AB69-1E6406A3F48F}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>RImageSchemas</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>RImageSchemas</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataSets\AlertDialog_1.2.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\BridgeServerConfiguration_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\CdText_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\CdText_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataSets\DiscMap_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\EditList.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ErrorDialog_1.2.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\FullDiscMap_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ImageOrderStatus_1.1.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ImageOrder_1.2.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ImageServerConfiguration_1.1.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ImageServerReply_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ImageServerRequest.cs">
+      <SubType>code</SubType>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="DataSets\LabelTemplate_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ProductionOrderStatus_1.2.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ProductionOrder_1.4.cs">
+      <SubType>code</SubType>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="DataSets\ProductionServerConfiguration_1.2.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ProductionServerReply_1.1.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="DataSets\ProductionServerRequest_1.1.cs">
+      <SubType>code</SubType>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="DataSets\ServerReply_1.0.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="Schemas\AlertDialog_1.2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AlertDialog_1.2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\BridgeServerConfiguration_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BridgeServerConfiguration_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\CdText_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CdText_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\DiscMap_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DiscMap_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\EditList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditList.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ErrorDialog_1.2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorDialog_1.2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\FullDiscMap_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FullDiscMap_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ImageOrderStatus_1.1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImageOrderStatus_1.1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ImageOrder_1.2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImageOrder_1.2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ImageServerConfiguration_1.1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImageServerConfiguration_1.1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ImageServerReply_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImageServerReply_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ImageServerRequest.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImageServerRequest.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\LabelTemplate_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabelTemplate_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ProductionOrderStatus_1.2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductionOrderStatus_1.2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ProductionOrder_1.4.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductionOrder_1.4.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ProductionServerConfiguration_1.2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductionServerConfiguration_1.2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ProductionServerReply_1.1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductionServerReply_1.1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ProductionServerRequest_1.1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductionServerRequest_1.1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schemas\ServerReply_1.0.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ServerReply_1.0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Serialization\AlertDialog_1_2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\BridgeServerConfiguration_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\CdText_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\DiscMap_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\EditList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ErrorDialog_1_2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\FullDiscMap_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ImageOrderStatus_1_1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ImageOrder_1_2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ImageServerConfiguration_1_1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ImageServerReply_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ImageServerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\LabelTemplate_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ProductionOrderStatus_1_2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ProductionOrder_1_4.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ProductionServerConfiguration_1_2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ProductionServerReply_1_1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ProductionServerRequest_1_1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\ServerReply_1_0.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="Schemas\AlertDialog_1.2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>AlertDialog_1.2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\BridgeServerConfiguration_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BridgeServerConfiguration_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\CdText_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CdText_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\DiscMap_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DiscMap_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\EditList.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EditList.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ErrorDialog_1.2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ErrorDialog_1.2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\FullDiscMap_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>FullDiscMap_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ImageOrderStatus_1.1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ImageOrderStatus_1.1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ImageOrder_1.2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ImageOrder_1.2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ImageServerConfiguration_1.1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ImageServerConfiguration_1.1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ImageServerReply_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ImageServerReply_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ImageServerRequest.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ImageServerRequest.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\LabelTemplate_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LabelTemplate_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ProductionOrderStatus_1.2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProductionOrderStatus_1.2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ProductionOrder_1.4.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProductionOrder_1.4.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ProductionServerConfiguration_1.2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProductionServerConfiguration_1.2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ProductionServerReply_1.1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProductionServerReply_1.1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ProductionServerRequest_1.1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProductionServerRequest_1.1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Schemas\ServerReply_1.0.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ServerReply_1.0.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Schemas\AlertDialog_1.2.xsx">
+      <DependentUpon>AlertDialog_1.2.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\BridgeServerConfiguration_1.0.xsx">
+      <DependentUpon>BridgeServerConfiguration_1.0.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\CdText_1.0.xsx">
+      <DependentUpon>CdText_1.0.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\DiscMap_1.0.xsx">
+      <DependentUpon>DiscMap_1.0.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\EditList.xsx">
+      <DependentUpon>EditList.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ErrorDialog_1.2.xsx">
+      <DependentUpon>ErrorDialog_1.2.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\FullDiscMap_1.0.xsx">
+      <DependentUpon>FullDiscMap_1.0.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ImageOrderStatus_1.1.xsx">
+      <DependentUpon>ImageOrderStatus_1.1.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ImageOrder_1.2.xsx">
+      <DependentUpon>ImageOrder_1.2.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ImageServerConfiguration_1.1.xsx">
+      <DependentUpon>ImageServerConfiguration_1.1.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ImageServerReply_1.0.xsx">
+      <DependentUpon>ImageServerReply_1.0.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ImageServerRequest.xsx">
+      <DependentUpon>ImageServerRequest.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\LabelTemplate_1.0.xsx">
+      <DependentUpon>LabelTemplate_1.0.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ProductionOrderStatus_1.2.xsx">
+      <DependentUpon>ProductionOrderStatus_1.2.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ProductionOrder_1.4.xsx">
+      <DependentUpon>ProductionOrder_1.4.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ProductionServerConfiguration_1.2.xsx">
+      <DependentUpon>ProductionServerConfiguration_1.2.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ProductionServerReply_1.1.xsx">
+      <DependentUpon>ProductionServerReply_1.1.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ProductionServerRequest_1.1.xsx">
+      <DependentUpon>ProductionServerRequest_1.1.xsd</DependentUpon>
+    </None>
+    <None Include="Schemas\ServerReply_1.0.xsx">
+      <DependentUpon>ServerReply_1.0.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

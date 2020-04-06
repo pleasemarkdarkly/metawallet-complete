@@ -1,0 +1,8 @@
+C:\Work\Mod\Common\MOD.IO\bin\Debug\MOD.IO.dll
+C:\Work\Mod\Common\MOD.IO\bin\Debug\MOD.IO.pdb
+C:\Work\Mod\Common\MOD.IO\bin\Debug\Interop.Shell32.dll
+C:\Work\Mod\Common\MOD.IO\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mod\Common\MOD.IO\obj\Debug\Interop.Shell32.dll
+C:\Work\Mod\Common\MOD.IO\obj\Debug\MOD.IO (VS2005).csproj.ResolveComReference.cache
+C:\Work\Mod\Common\MOD.IO\obj\Debug\MOD.IO.dll
+C:\Work\Mod\Common\MOD.IO\obj\Debug\MOD.IO.pdb

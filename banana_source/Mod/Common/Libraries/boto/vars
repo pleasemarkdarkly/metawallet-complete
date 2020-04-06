@@ -1,0 +1,3 @@
+export PYTHONPATH=/home/kaym/AWS/boto
+export AWS_ACCESS_KEY_ID=1M6RS8CA6W3A0F2R7RR2
+export AWS_SECRET_ACCESS_KEY=a57t8pwG3lurWGkqcyzuk1q6alx/UByd84bFLaLY

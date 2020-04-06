@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD for ErrorDialog_1.2, Jan 20, 2005 -->
+<!--
+    Revisions:
+    Feb 20, 2004 Burns - Changed Text attributes from #IMPLIED to #REQUIRED.
+    Jun 16, 2004 Burns - Added SupplyError attribute. Indicates that dialog is for Hopper Empty,
+    	Bin Full, Slot Full, etc.
+    Jan 20, 2005 Burns - Added OrderId attribute. 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ErrorDialog" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="Buttons">
+					<xs:attribute name="ServerId" use="required" />
+					<xs:attribute name="Title" use="required" />
+					<xs:attribute name="Device" use="required" />
+					<xs:attribute name="ErrorCode" use="required" />
+					<xs:attribute name="Message" use="required" />
+					<xs:attribute name="ID" use="required" />
+					<xs:attribute name="SupplyError" default="false">
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="true" />
+								<xs:enumeration value="false" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="OrderId" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!-- ID is a decimal representation of a 32-bit number. It is unique for each dialog. -->
+	<xs:complexType name="Buttons">
+		<xs:sequence>
+			<xs:element ref="Buttons" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Buttons">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="Top" />
+				<xs:element minOccurs="0" ref="Middle" />
+				<xs:element minOccurs="0" ref="Bottom" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Top">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Middle">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Bottom">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

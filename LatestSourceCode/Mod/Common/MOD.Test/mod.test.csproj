@@ -1,0 +1,71 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3427BFB4-111C-4F2C-BC71-04A7E38A4316}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MOD.Test</RootNamespace>
+    <AssemblyName>MOD.Test</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PerformanceTestMetrics.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestErrorType.cs" />
+    <Compile Include="TestException.cs" />
+    <Compile Include="TestFailureLevel.cs" />
+    <Compile Include="TestHelper.cs" />
+    <Compile Include="TestPerformanceLevel.cs" />
+    <Compile Include="TestResults.cs" />
+    <Compile Include="UnitTestErrorType.cs" />
+    <Compile Include="UnitTestException.cs" />
+    <Compile Include="UnitTestFailureLevel.cs" />
+    <Compile Include="UnitTestHelper.cs" />
+    <Compile Include="UnitTestPerformanceLevel.cs" />
+    <Compile Include="UnitTestResults.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MOD.Data\MOD.Data %28VS2005%29.csproj">
+      <Project>{26D37830-368C-47B2-A5C0-F11FFC1C6AF7}</Project>
+      <Name>MOD.Data %28VS2005%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MOD.Exceptions\MOD.Exceptions %28VS2005%29.csproj">
+      <Project>{7BF0B846-D932-426B-91E6-A4ECC1CB95F6}</Project>
+      <Name>MOD.Exceptions %28VS2005%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

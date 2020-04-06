@@ -1,0 +1,96 @@
+<?xml version='1.0'?>
+<!-- This file represents the test definitions for testshell -->
+<testshell title="Windows Media Device Acceptance Tests">
+
+<options runall="no"
+  closeAfterRun="no"
+  closeOnFail="no"
+  maxResultsViewKB="200"
+  helpDocName="PDTkit.chm"
+  >
+</options>
+
+<group name="Device Acceptance Tests">
+  <group name="Content Transfer Tests">
+    <test name="WMA Content Transfer">
+      <command>wmdmcopy\wmdmcopy.exe</command>
+      <parameters>-a -r -c "wmdmcopy\wmdmcopy_xferWMA.pro"</parameters>
+      <logfile>logs\wmdmcopy_XferWMA.log</logfile>
+      <logtype>shell98</logtype>
+    </test>
+    <test name="WMA Content and Metadata Transfer">
+      <command>wmdmcopy\wmdmcopy.exe</command>
+      <parameters>-a -r -c "wmdmcopy\wmdmcopy_xferMetaWMA.pro"</parameters>
+      <logfile>logs\wmdmcopy_XferMetaWMA.log</logfile>
+      <logtype>shell98</logtype>
+    </test>
+  </group>
+
+  <group name="Stress Tests">
+    <test name="Content Transfer Stress">
+      <command>wmdmcopy.exe</command>
+      <parameters>-a -r -c "wmdmcopy_Stress.pro"</parameters>
+      <relworkingdir>wmdmcopy</relworkingdir>
+      <logfile>logs\wmdmcopy_Stress.log</logfile>
+      <logtype>shell98</logtype>
+    </test>
+  </group>
+
+  <group name="WMDM Performance Tests">
+    <test name="Single object transfer to device / transfer from device / enumerate / delete">
+      <command>wpdtestapp.exe</command>
+      <parameters>/c "perftest-1.pro" -p "/s 'perftest-1.ini'"</parameters>
+      <relworkingdir>wmdmperf</relworkingdir>
+      <logfile>logs\perftest-1.log</logfile>
+      <logtype>shell98u</logtype>
+      <precommand>prerun.cmd</precommand>
+      <preparameters></preparameters>
+    </test>
+    <test name="100 objects transfer to device / transfer from device / enumerate / delete">
+      <command>wpdtestapp.exe</command>
+      <parameters>/c "perftest-100.pro" -p "/s 'perftest-100.ini'"</parameters>
+      <relworkingdir>wmdmperf</relworkingdir>
+      <logfile>logs\perftest-100.log</logfile>
+      <logtype>shell98u</logtype>
+      <precommand>prerun.cmd</precommand>
+      <preparameters></preparameters>
+    </test>
+  </group>
+
+  <group name="Protocol Compliance Tests">
+    <test name="MTP Compliance Test">
+      <command>mtptest.exe</command>
+      <parameters>-a -c</parameters>
+      <relworkingdir>mtptest</relworkingdir>
+      <logfile>mtptest\mtptest.log</logfile>
+      <logtype>csshell</logtype>
+    </test>
+  </group>
+
+  <group name="Protected Content Tests">
+    <test name="MS-DRM Content and Metadata Transfer">
+      <command>wmdmcopy\wmdmcopy.exe</command>
+      <parameters>-a -r -c "wmdmcopy\wmdmcopy_xferDRM.pro"</parameters>
+      <logfile>logs\wmdmcopy_XferDRM.log</logfile>
+      <logtype>shell98</logtype>
+      <postcommand>resultview.exe</postcommand>
+      <postparameters>DRMDeviceTasks.log</postparameters>
+    </test>
+    <test name="MS-DRM No Transfer Content">
+      <command>wmdmcopy\wmdmcopy.exe</command>
+      <parameters>-a -r -c "wmdmcopy\wmdmcopy_NoxferDRM.pro"</parameters>
+      <logfile>logs\wmdmcopy_NoXferDRM.log</logfile>
+      <logtype>shell98</logtype>
+    </test>
+  </group>
+  <group name="WMA Listening Tests">
+    <test name="Listening Test Content Transfer">
+      <command>wmdmcopy\wmdmcopy.exe</command>
+      <parameters>-a -r -c "wmdmcopy\wmdmcopy_listening.pro"</parameters>
+      <logfile>logs\wmdmcopy_listening.log</logfile>
+      <logtype>shell98</logtype>
+    </test>
+  </group>
+</group>
+</testshell>
+

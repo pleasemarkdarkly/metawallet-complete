@@ -1,0 +1,9 @@
+C:\Work\Mod\Common\MOD.Configuration\bin\Debug\MOD.Configuration.dll
+C:\Work\Mod\Common\MOD.Configuration\bin\Debug\MOD.Configuration.pdb
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\MOD.Configuration.ConfigConfirmForm.resources
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\MOD.Configuration.Install.ConfigInstaller.resources
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\MOD.Configuration.Install.InputBoxDialog.resources
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\MOD.Configuration (VS2005).csproj.GenerateResource.Cache
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\MOD.Configuration.dll
+C:\Work\Mod\Common\MOD.Configuration\obj\Debug\MOD.Configuration.pdb

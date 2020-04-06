@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes" ?> 
+<MTPTestCaseData>
+<DeviceProperties>
+	<NumberOfTests>4</NumberOfTests>
+	<Test1>BatteryLevelProperty</Test1>
+	<Test2>BurstIntervalProperty</Test2>
+	<Test3>BurstNumberProperty</Test3>
+        	<Test4>BurstNumalProperty</Test4>
+</DeviceProperties>
+<Operations>
+	<NumberOfTests>5</NumberOfTests>
+	<Test1>CloseSessionOperation</Test1>
+	<Test2>FormatStoreOperation</Test2>
+	<Test3>GetDeviceInfoOperation</Test3>
+	<Test4>GetDevPropDescOperation</Test4>
+	<Test5>FormatStoreNegAutoOperation</Test5>
+</Operations>
+</MTPTestCaseData>

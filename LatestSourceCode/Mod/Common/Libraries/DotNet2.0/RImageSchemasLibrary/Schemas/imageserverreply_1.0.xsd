@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by M Nohr (Rimage) -->
+<!-- DTD for ImageServerReply_1.0, Dec 8,  2003 -->
+<!-- ReplyTimestamp format = CCYY-MM-DD HH:MM:SS -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ImageServerReply" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="AckOnly" />
+				<xs:element ref="ServerStatus" />
+				<xs:element ref="OrderList" />
+				<xs:element ref="SessionLog" />
+				<xs:element ref="ImagingParameterSettings" />
+			</xs:choice>
+			<xs:attribute name="ServerId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="CommandState" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="IN_PROCESS" />
+						<xs:enumeration value="COMPLETED" />
+						<xs:enumeration value="FAILED" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CommandErrorCode" use="required" />
+			<xs:attribute name="CommandErrorMessage" />
+			<xs:attribute name="ReplyTimestamp" use="required" />
+			<xs:attribute name="Automation" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="StartPending" />
+						<xs:enumeration value="Running" />
+						<xs:enumeration value="Paused" />
+						<xs:enumeration value="PausePending" />
+						<xs:enumeration value="StopPending" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The command error code  will range from 0-999.  A value of 0 indicates successful completion -->
+	<xs:element name="AckOnly">
+		<xs:complexType />
+	</xs:element>
+	<!-- reply to GetServerStatus -->
+	<xs:element name="ServerStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerInfo" />
+				<xs:element ref="ImageServerInfo" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerInfo">
+		<xs:complexType>
+			<xs:attribute name="SoftwareVersion" use="required" />
+			<xs:attribute name="Description" />
+			<xs:attribute name="Hostname" use="required" />
+			<xs:attribute name="Cluster" use="required" />
+			<xs:attribute name="MessagingPort" use="required" />
+			<xs:attribute name="SystemFolder" use="required" />
+			<xs:attribute name="IsService" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PasswordSet" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Timestamp format = CCYY-MM-DD HH:MM:SS -->
+	<xs:element name="ImageServerInfo">
+		<xs:complexType>
+			<xs:attribute name="ImagesWritten" />
+			<xs:attribute name="ImagesRejected" />
+		</xs:complexType>
+	</xs:element>
+	<!-- reply to GetOrderList -->
+	<xs:element name="OrderList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="ImagingOrder" />
+			</xs:sequence>
+			<xs:attribute name="Cluster" use="required" />
+			<xs:attribute name="NumberOfOrders" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- StatusTime format = CCYY-MM-DD HH:MM:SS -->
+	<xs:element name="ImagingOrder">
+		<xs:complexType>
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="OrderState" default="ACTIVE">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="ACTIVE" />
+						<xs:enumeration value="CANCELING" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PercentCompleted" use="required" />
+			<xs:attribute name="OriginalOrder" />
+		</xs:complexType>
+	</xs:element>
+	<!-- reply to GetSessionLog -->
+	<!-- MessageId is set to 0 if entry is an informational message. -->
+	<xs:element name="SessionLog">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Entry" />
+			</xs:sequence>
+			<xs:attribute name="NumberOfEntries" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Entry">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+			<xs:attribute name="Timestamp" use="required" />
+			<xs:attribute name="MessageId" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- used for SetParameter -->
+	<!-- The 'OrderStatusUpdateInterval' is specified in seconds -->
+	<xs:element name="ImagingParameterSettings" type="Server" />
+	<xs:complexType name="Server">
+		<xs:sequence>
+			<xs:element ref="Server" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Server">
+		<xs:complexType>
+			<xs:attribute name="Description" />
+			<xs:attribute name="OrderStatusUpdateInterval" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

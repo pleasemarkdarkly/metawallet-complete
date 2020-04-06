@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD for ProductionOrder_1.4, July 22, 2004 -->
+<!--
+    Revisions:
+    Oct 21, 2002 Burns - Added comment for Action:Label:PerfectPrintAngle to use floating point representation.
+    Oct 23, 2002 Burns - Added ExtractISOFiles attribute to the Action:Read:ReadTrack element.
+    Rev 1.1:
+        May 01, 2003 Burns - Added WriteDisc sub-element to Action:Record element. Added FullDiscMap
+    	attribute to Read:Map element. Added Read:ReadDisc element.
+    Rev 1.2:
+        Sep 11, 2003 Burns - Added CallReadProc sub-element to Action:Read element.
+        Oct 10, 2003 Burns - Added PrintRejectLabelOnError attribute for Action:Read:CallReadProc element.
+    Rev 1.3:
+        Nov 18, 2003 Burns - Added BlockSize attribute to Read:ReadDisc element.
+        Nov 20, 2003 Burns - Added SimulateRecording and SimulatePrinting attributes to the ProductionOrder element.
+    	   Added DisableExtentFixups attribute to the Action:Record:WriteTrack:Data element.
+    	   Added RenderLocalCopy attribute to Action:Label:BTW element.
+        Nov 25, 2003 Burns - Changed the default value of the Label:BTW-SaveAfterRendering attribute from "default" to "false".
+    Rev 1.4:
+        July 22, 2004 Paulson - Added CD_Text_Filename attribute to ProductionOrder element.
+        Sep 16, 2004 Burns - Added DVDR-DL to Media:Type.
+        Oct 6, 2004 Burns - Added RenderLocalCopy attribute to Label:BTW_ODBC element.
+        Nov 11, 2004 Burns - Added MergeFileHasFieldNames attribute to Label:BTW element.
+        Dec 13, 2004 Burns - Added ReadSpeed attribute to Read and Copy elements.
+        Dec 14, 2004 Burns - Changed default for ReadSpeed attribute to "Unspecified".
+        Jan 14, 2005 Burns - Added new media types.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ProductionOrder" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Media" />
+				<xs:element ref="Target" />
+				<xs:element minOccurs="0" ref="InOut" />
+				<xs:element minOccurs="0" ref="Customize" />
+				<xs:element maxOccurs="unbounded" ref="Action" />
+			</xs:sequence>
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="Originator" />
+			<xs:attribute name="Priority" default="Normal">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Low" />
+						<xs:enumeration value="Normal" />
+						<xs:enumeration value="High" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Copies" default="1" />
+			<xs:attribute name="EmailAddress" />
+			<xs:attribute name="SimulateRecording" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SimulatePrinting" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CD_Text_Filename" />
+		</xs:complexType>
+	</xs:element>
+	<!-- If EmailAddress is present, an e-mail will be sent on completion or cancellation of the order -->
+	<xs:element name="Media">
+		<xs:complexType>
+			<xs:attribute name="Type" default="CDR">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDR" />
+						<xs:enumeration value="DVDR" />
+						<xs:enumeration value="DVDR-DL" />
+						<xs:enumeration value="SOQ_CDR" />
+						<xs:enumeration value="SOQ_DVDR" />
+						<xs:enumeration value="SOQ_DVDR-DL" />
+						<xs:enumeration value="DVDR-HD" />
+						<xs:enumeration value="DVDR-BD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Size" default="120mm">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="120mm" />
+						<xs:enumeration value="80mm" />
+						<xs:enumeration value="63mm" />
+						<xs:enumeration value="61mm" />
+						<xs:enumeration value="58mm" />
+						<xs:enumeration value="59x85mm" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--
+        Currently the only valid Size for all types other tha CDR is 120mm.
+        The SOQ_ prefix refers to SecurOQ variations.
+        DVDR-HD is the next-generation media specified by the DVD Forum.
+        DVDR-BD is commonly known as Blu-ray.
+    -->
+	<xs:element name="Target">
+		<xs:complexType>
+			<xs:attribute name="Cluster" default="DefaultProductionCluster" />
+			<xs:attribute name="Server" default="ANY" />
+			<xs:attribute name="Line" default="ANY">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="ANY" />
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="4" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- a target line (other than "any") without a target server is not valid -->
+	<xs:element name="InOut">
+		<xs:complexType>
+			<xs:attribute name="InputBin" default="ANY">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="ANY" />
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="4" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="OutputMailslot" />
+		</xs:complexType>
+	</xs:element>
+	<!--
+        InOut:OutputMailslot - implied value = 0 (dont use mailslot), otherwise set
+        to the slot number, 1 for a single mailslot transporter, or ANY to have
+        Production Server select the slot and report it back via the status message.
+    -->
+	<xs:element name="Customize">
+		<xs:complexType>
+			<xs:attribute name="UserType" use="required" />
+			<xs:attribute name="UserData" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Customize:UserType - Only the first character is used -->
+	<!-- Customize:UserData - Not used unless Customize:UserType is specified -->
+	<xs:element name="Action">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="Record" />
+				<xs:element ref="Read" />
+				<xs:element ref="Label" />
+				<xs:element ref="Collate" />
+				<xs:element ref="Copy" />
+				<xs:element ref="Destroy" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- Action:Record element and sub-elements -->
+	<xs:element name="Record">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="WriteTrack" />
+				<xs:element ref="WriteDDP" />
+				<xs:element ref="Fixate" />
+				<xs:element ref="ReserveTrack" />
+				<xs:element ref="WriteDisc" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WriteDisc">
+		<xs:complexType>
+			<xs:attribute name="Filename" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- WriteDisc records only from a Rimage 'full-disc' image file. -->
+	<xs:element name="WriteTrack">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="Audio" />
+				<xs:element ref="DataElement" />
+			</xs:choice>
+			<xs:attribute name="Filename" use="required" />
+			<xs:attribute name="ReservedTrackNumber" />
+			<xs:attribute name="DeleteAfterRecording" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Audio">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="SubIndex" />
+				<xs:element minOccurs="0" ref="AudioControl" />
+			</xs:sequence>
+			<xs:attribute name="ISRC" />
+			<xs:attribute name="AddPregapBlocks" />
+			<xs:attribute name="EmbeddedPregapBlocks" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SubIndex">
+		<xs:complexType>
+			<xs:attribute name="BlockNumber" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AudioControl">
+		<xs:complexType>
+			<xs:attribute name="AllowCopy" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PreEmphasis" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="FourChannel" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataElement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="VolumeId" />
+				<xs:element minOccurs="0" ref="DataControl" />
+				<xs:element minOccurs="0" ref="DvdFlags" />
+			</xs:sequence>
+			<xs:attribute name="Type" default="Mode1">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Mode1" />
+						<xs:enumeration value="Mode2" />
+						<xs:enumeration value="XA_Form1" />
+						<xs:enumeration value="XA_Mixed" />
+						<xs:enumeration value="CD_I" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MergeSessions" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DisableExtentFixups" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="VerifyChecksum" />
+		</xs:complexType>
+	</xs:element>
+	<!--
+        MergeSessions applies only to the first track in a new session. It causes the ISO-9660 filesystem to
+        be merged with ISO-9660 filesystem of this track.
+        DisableExtentFixups applies only to the first track in a new session. It disables recalculating the
+        extents (sector numbers) in the ISO-9660 filesystem for this track when appending a session onto a disc.
+    -->
+	<xs:element name="VolumeId">
+		<xs:complexType>
+			<xs:attribute name="volume_id" />
+			<xs:attribute name="Usage" default="MustExistOnDisc">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="MustExistOnDisc" />
+						<xs:enumeration value="MustNotExistOnDisc" />
+						<xs:enumeration value="ChangeTo" />
+						<xs:enumeration value="ReadPVDFromFile" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PvdFilename" />
+		</xs:complexType>
+	</xs:element>
+	<!-- PvdFilename must be present for Usage = ReadPVDFromFile. volume_id must exist for the other Usage values. -->
+	<xs:element name="DataControl">
+		<xs:complexType>
+			<xs:attribute name="Bit1" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AllowCopy" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Bit4" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Bit8" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DvdFlags">
+		<xs:complexType>
+			<xs:attribute name="ADP_TY" default="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="0" />
+						<xs:enumeration value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WriteDDP">
+		<xs:complexType>
+			<xs:attribute name="DirectoryName" use="required" />
+			<xs:attribute name="Appendable" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Fixate">
+		<xs:complexType>
+			<xs:attribute name="Type" default="TAO">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="TAO" />
+						<xs:enumeration value="SAO" />
+						<xs:enumeration value="SAO_Segmented" />
+						<xs:enumeration value="TAO_Segmented" />
+						<xs:enumeration value="Raw" />
+						<xs:enumeration value="Skip" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Final" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UPC_EAN" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ReserveTrack">
+		<xs:complexType>
+			<xs:attribute name="NumberOfBlocks" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The default track number is 1 for ReserveTrack -->
+	<!-- Action:Label element and sub-elements -->
+	<xs:element name="Label">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="PCL" />
+				<xs:element ref="BMP" />
+				<xs:element ref="BTW" />
+				<xs:element ref="BTW_ODBC" />
+				<xs:element ref="PDF" />
+			</xs:choice>
+			<xs:attribute name="Filename" use="required" />
+			<xs:attribute name="PerfectPrintAngle" />
+			<xs:attribute name="DeleteOnCompletion" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--
+        Specify PerfectPrintAngle as floating point with a resolution of 0.25 degrees,
+        a minimum value of 0, and a maximum value of 359.75. Do not specify the
+            attribute at all if you do not want to use 'Perfect Print'.
+    -->
+	<xs:element name="PCL">
+		<xs:complexType />
+	</xs:element>
+	<!-- PCL is a synonym for PCL (a pre-rendered label file) -->
+	<xs:element name="BMP">
+		<xs:complexType />
+	</xs:element>
+	<!-- BMP files can only be printed with the Prism printers and the BMP file and must be 2-color bitmap -->
+	<xs:element name="BTW">
+		<xs:complexType>
+			<xs:attribute name="Merge_Filename" />
+			<xs:attribute name="SaveAfterRendering" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+						<xs:enumeration value="default" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DeleteMergeFileOnCompletion" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="RenderLocalCopy" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MergeFileHasFieldNames" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--
+        The default behavior for SaveAfterRendering is "false" as of PS v 6.4.X.0.
+        Set RenderLocalCopy to true to cause Production Server to copy the label file to a temporary
+            file and then render it and then delete the temporary file. This is useful in a situations
+            where the rendering application may not have access rights to the network label file or the
+            label contains serialization fields that are not to be updated in the original label file.
+    -->
+	<xs:element name="BTW_ODBC">
+		<xs:complexType>
+			<xs:attribute name="ODBC_Connect" use="required" />
+			<xs:attribute name="SQLSelect" use="required" />
+			<xs:attribute name="RenderLocalCopy" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PDF">
+		<xs:complexType />
+	</xs:element>
+	<!-- An FDF file may also be used as a PDF label -->
+	<!--
+        Action:Collate element - can be specified as the last action in an order to cause a
+        collate 'slug' to be put onto the output spindle after the order is completed.
+        Available in FIFO mode only
+    -->
+	<xs:element name="Collate">
+		<xs:complexType />
+	</xs:element>
+	<!-- Action:Read element and sub-elements -->
+	<xs:element name="Read">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="Map" />
+				<xs:element ref="ReadTrack" />
+				<xs:element ref="ReadPVD" />
+				<xs:element ref="CloseSession" />
+				<xs:element ref="Destroy1" />
+				<xs:element ref="TerminateRead" />
+				<xs:element ref="ReadDDP" />
+				<xs:element ref="ReadDisc" />
+				<xs:element ref="CallReadProc" />
+			</xs:choice>
+			<xs:attribute name="ReadSpeed" default="Unspecified">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Unspecified" />
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="4" />
+						<xs:enumeration value="8" />
+						<xs:enumeration value="Maximum" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Action:Read:Map element -->
+	<xs:element name="Map">
+		<xs:complexType>
+			<xs:attribute name="Filename" use="required" />
+			<xs:attribute name="GetBarcode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="FullDiscMap" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Action:Read:ReadTrack element -->
+	<xs:element name="ReadTrack">
+		<xs:complexType>
+			<xs:attribute name="Filename" use="required" />
+			<xs:attribute name="TrackNumber" use="required" />
+			<xs:attribute name="PrefixHeader" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Description" />
+			<xs:attribute name="ReadPregap" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ReadNextPregap" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="BlockSize" default="default">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="default" />
+						<xs:enumeration value="2352" />
+						<xs:enumeration value="2368" />
+						<xs:enumeration value="2448" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ExtractISOFiles" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The Description is only used if the PrefixHeader is set to true -->
+	<!-- BlockSize other than default reads in raw mode -->
+	<!--
+        If ExtractISOFiles is true, the Filename attribute specifies the parent
+        directory under which all of the files and directories from the disc are
+        copied. All of the other attributes except TrackNumber are ignored.
+    -->
+	<!-- Action:Read:ReadPVD element -->
+	<xs:element name="ReadPVD">
+		<xs:complexType>
+			<xs:attribute name="Filename" use="required" />
+			<xs:attribute name="TrackNumber" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Action:Read:CloseSession element -->
+	<xs:element name="CloseSession">
+		<xs:complexType>
+			<xs:attribute name="Appendable" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Action:Read:TerminateRead element -->
+	<xs:element name="TerminateRead">
+		<xs:complexType>
+			<xs:attribute name="EjectDisc" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PrintRejectLabel" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="OutputToAcceptBin" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--
+        If PrintRejectLabel or OutputToAcceptBin is true the disc will be ejected,
+        regardless of the EjectDisc value.
+            Note: If both PrintRejectLabel and OutputToAcceptBin are 'true' the
+            PrintRejectLabel attribute is the one that will be acted upon.
+    -->
+	<!-- Action:Read:ReadDDP element -->
+	<xs:element name="ReadDDP">
+		<xs:complexType>
+			<xs:attribute name="DirectoryName" use="required" />
+			<xs:attribute name="MasterId" />
+			<xs:attribute name="Text" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Action:Read:ReadDisc element -->
+	<xs:element name="ReadDisc">
+		<xs:complexType>
+			<xs:attribute name="Filename" use="required" />
+			<xs:attribute name="BlockSize" default="default">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="default" />
+						<xs:enumeration value="2352" />
+						<xs:enumeration value="2368" />
+						<xs:enumeration value="2448" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- BlockSize other than default reads in raw mode -->
+	<!-- Action:Read:CallReadProc element -->
+	<xs:element name="CallReadProc">
+		<xs:complexType>
+			<xs:attribute name="PrintRejectLabelOnError" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--
+        If the ReadProc function in the ModifyDisc DLL returns FALSE, the disc
+        will be ejected and put in the reject bin. The PrintRejectLabelOnError
+            attribute modifies this behavior to print the reject pattern before
+            putting the disc in the reject bin.
+    -->
+	<!-- Action:Destroy | Action:Read:Destroy element -->
+	<xs:element name="Destroy">
+		<xs:complexType>
+			<xs:attribute name="VolumeId" />
+		</xs:complexType>
+	</xs:element>
+	<!--
+        VolumeId is ignored in an Action:Read:Destroy element. In an Action:Destroy
+        element only discs whose VolumeId matches (if specified) will be destroyed
+    -->
+	<!-- Action:Copy element -->
+	<xs:element name="Copy">
+		<xs:complexType>
+			<xs:attribute name="DisplayMap" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ForceDAO" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="RawMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="VerifyChecksum" />
+			<xs:attribute name="ReadSpeed" default="Maximum">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="4" />
+						<xs:enumeration value="8" />
+						<xs:enumeration value="Maximum" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Destroy1">
+		<xs:complexType>
+			<xs:attribute name="VolumeId" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

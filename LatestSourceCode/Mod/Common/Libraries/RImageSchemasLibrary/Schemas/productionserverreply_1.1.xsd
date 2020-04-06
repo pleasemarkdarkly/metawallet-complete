@@ -1,0 +1,1154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD for ProductionServerReply_1.1, Mar 11, 2005 -->
+<!--
+    Revisions:
+    Rev 1.1:
+      Jul 14, 2004 D.B. - Added UnlockingCodes element.
+      Aug  3, 2004 D.D. - Added new attributes to the ProductionParameterSettings:Printing element.
+         Added MediaCodes to the ProductionParameterSettings element.
+      Sep 21, 2004 D.B. - Added new attributes AvailableMediaTypes2 to the Autoloader element.
+         Added "DVDR-DLInputOnly" to the BinSetting:Setting and Bin:Usage attribute enumerations.
+      Jan 14, 2005 Burns - Added new values for Autoloader:MediaType, BinSetting:Setting
+         and Bin:Usage
+      Feb  1, 2005 Burns - Revised Bin:Usage to show only the values output by Production Server.
+      Feb  7, 2005 Burns - Added MaxDVDRecordingSpeed attribute to Recording element.
+      Mar 11, 2005 Burns - Added AutoRespondOnStartup attribute to the KioskMode element.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="ProductionServerReply" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="AckOnly" />
+				<xs:element ref="ServerStatus" />
+				<xs:element ref="OrderList" />
+				<xs:element ref="SessionLog" />
+				<xs:element ref="DialogAction" />
+				<xs:element ref="ProductionParameterSettings" />
+				<xs:element ref="UnlockingCodes" />
+			</xs:choice>
+			<xs:attribute name="ServerId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="CommandState" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="IN_PROCESS" />
+						<xs:enumeration value="COMPLETED" />
+						<xs:enumeration value="FAILED" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CommandErrorCode" use="required" />
+			<xs:attribute name="CommandErrorMessage" />
+			<xs:attribute name="ReplyTimestamp" use="required" />
+			<xs:attribute name="Automation" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="StartPending" />
+						<xs:enumeration value="Running" />
+						<xs:enumeration value="Paused" />
+						<xs:enumeration value="PausePending" />
+						<xs:enumeration value="StopPending" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The command error code  will range from 0-999.  A value of 0 indicates successful completion -->
+	<!-- ReplyTimestamp format = CCYY-MM-DD HH:MM:SS ; Indicates when the Server generated the reply message -->
+	<xs:element name="AckOnly">
+		<xs:complexType />
+	</xs:element>
+	<!-- 'ServerStatus' is the reply from a request for 'GetServerStatus' -->
+	<xs:element name="ServerStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ServerInfo" />
+				<xs:element ref="ProductionCount" />
+				<xs:element minOccurs="0" ref="Switches" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="AutoloaderStatus" />
+				<xs:element minOccurs="0" ref="ActivationInfo" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerInfo">
+		<xs:complexType>
+			<xs:attribute name="SoftwareVersion" use="required" />
+			<xs:attribute name="Description" />
+			<xs:attribute name="Hostname" use="required" />
+			<xs:attribute name="Cluster" use="required" />
+			<xs:attribute name="MessagingPort" use="required" />
+			<xs:attribute name="SystemFolder" use="required" />
+			<xs:attribute name="IsService" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PasswordSet" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ProductionCount">
+		<xs:complexType>
+			<xs:attribute name="CopiesProduced" use="required" />
+			<xs:attribute name="CopiesRejected" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Switches">
+		<xs:complexType>
+			<xs:attribute name="ManufacturingTestMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="VerifyOnlyMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SlugsMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="NoLogLimit" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SimulateFixate" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SetupMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DirectImaging" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AutoThroughPutMeasurement" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TimingLogged" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SkipOrderStatusUpdates" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PrintOnlyMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SkipAutoloaderScanning" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PrintBeforeRecording" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UseDriveLettersForRecorders" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TraceSCSICommands" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TraceReadWriteCommands" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TraceSerialCommands" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TraceLabelAndPrinting" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TraceXMLMessages" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="LogSkippingOrder" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="RunWithoutDevices" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DisablePreloadingRecorderAfterPrinterLoad" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DisableCacheLocking" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="EnableCacheLimiting" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SkipSerialPortsForAutoloader" />
+			<xs:attribute name="SkipDrivesForReaderRecorderCache" />
+			<xs:attribute name="SecondsDelayBeforeMainWindow" />
+			<xs:attribute name="UseParallelPortForPrism" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DisableDriverNameInRendering" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="EraseCDRWBeforeRecording" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="StrictWaveFileChecking" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Each attribute refers to acommand-line switch. Comment here show English text that -->
+	<!-- can be used to describe the switch when it is set to true -->
+	<!-- ManufacturingTestMode /Manufacturing Test mode is enabled -->
+	<!-- VerifyOnlyMode /Verify Only mode is enabled -->
+	<!-- SlugsMode /Slug mode is enabled -->
+	<!-- NoLogLimit /No Log file size limit -->
+	<!-- SimulateFixate /Skip Fixate when simulaing recording -->
+	<!-- SetupMode /Server is in Setup mode -->
+	<!-- DirectImaging /Skip caching when possible -->
+	<!-- AutoThroughPutMeasurement /Automatic throughput measurement is enabled -->
+	<!-- TimingLogged /Timing information is logged -->
+	<!-- SkipOrderStatusUpdates /Skipping order status updates -->
+	<!-- PrintOnlyMode /Server is in Print only mode -->
+	<!-- SkipAutoloaderScanning /Autoloader search disabled -->
+	<!-- PrintBeforeRecording /Print-First mode enabled -->
+	<!-- UseDriveLettersForRecorders //Using drive letters for recorders enabled -->
+	<!-- TraceSCSICommands SCSI tracing enabled -->
+	<!-- TraceReadWriteCommands /Tracing for reading and writing to drives enabled -->
+	<!-- TraceSerialCommands /Serial tracing enabled -->
+	<!-- TraceLabelAndPrinting /Order Tracing enabled -->
+	<!-- TraceXMLMessages /XML message tracing enabled -->
+	<!-- LogSkippingOrder /Order 'reason not picked up' tracing enabled -->
+	<!-- RunWithoutDevices /Running without devices -->
+	<!-- DisablePreloadingRecorderAfterPrinterLoad /Pre-loading recorders is disabled -->
+	<!-- DisableCacheLocking /Cache disk locking is disabled -->
+	<!-- EnableCacheLimiting /Cache disk download limiting is enabled -->
+	<!-- SkipSerialPortsForAutoloader /Skip serial COM port(s) when searching for autoloaders; This is a string of comma-separated numbers denoting COMn -->
+	<!-- where n is the port number from 1 to 256 -->
+	<!-- SkipDrivesForReaderRecorderCache /Skip drive letter(s) when searching for cache drives; This is a string of letters -->
+	<!-- where each letter denotes a drive -->
+	<!-- SecondsDelayBeforeMainWindow /Delay extra time before startup to allow Plug and Play manager to complete bus enumberation before scanning for recorder. This value indicates seconds specified on the command line -->
+	<!-- UseParallelPortForPrism /Using parallel port for Prism printer -->
+	<!-- DisableDriverNameInRendering /Using 'old' CD Designer command line arguments -->
+	<!-- EraseCDRWBeforeRecording /CD-RW erase before recording is enabled -->
+	<!-- StrictWaveFileChecking /Strict wave file checking is enabled -->
+	<!---->
+	<!---->
+	<!-- Autoloader status is used primarily to determine bin levels, mailslot status, and whether any devices including autoloaders -->
+	<!-- are in a disabled state. -->
+	<xs:element name="AutoloaderStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Bin" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Printer" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Recorder" />
+			</xs:sequence>
+			<xs:attribute name="LoaderNumber" use="required" />
+			<xs:attribute name="Offline" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MailslotLevel" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Autoloader numbering begins with '1' -->
+	<!-- When an autoloader is disabled, bin status and mailslot level are not listed. -->
+	<!-- Wnen an autoloader is disabled, printer and  recorder elements are not listed, since all these are disabled as well. -->
+	<!-- Mailslot level is shown only if it is in use; Expressed  in percent full (0-100%); -->
+	<!-- Numbering of bins, printers, and recorders of an autoloader  begins with '1' -->
+	<!--
+        Bin status indicates how full of discs and how bin is currently in use.
+        'Usage' refers to how the bin is currently used so
+        that a bin configured for 'Input/Output", for example, will either have an "Input" or "Output" usage.
+        Bins that are configured for a specific type of media input, such as DVDR Input Only will
+        be specified as 'Input'.
+    -->
+	<xs:element name="Bin">
+		<xs:complexType>
+			<xs:attribute name="Number" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="4" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Level" />
+			<xs:attribute name="Usage" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Input" />
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="Collate" />
+						<xs:enumeration value="ReservedInput" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- Bin level is in percent full (0-100%) -->
+	<xs:element name="Printer">
+		<xs:complexType>
+			<xs:attribute name="Number" use="required" />
+			<xs:attribute name="Offline" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="LabelsRemaining" />
+			<xs:attribute name="DiscCount" />
+		</xs:complexType>
+	</xs:element>
+	<!--  The labels remaining and count of discs are returned only when the printer is able to provide this data -->
+	<xs:element name="Recorder">
+		<xs:complexType>
+			<xs:attribute name="Number" use="required" />
+			<xs:attribute name="Offline" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DiscCount" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The total number of discs processed by the recorder is in 'DiscCount' -->
+	<!-- Not all recorders support providing the 'DiscCount' data. -->
+	<!---->
+	<!-- 'ActivationInfo' contains information about features that are subject to licenses or expiration -->
+	<!-- If the Status is "Unlimited", the 'DaysRemaining' is not included -->
+	<!-- The RawMode, SmarteCD, and VideoCD elements are absent if there is no corresponding license file. -->
+	<xs:element name="ActivationInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Base" />
+				<xs:element minOccurs="0" ref="RawMode" />
+				<xs:element minOccurs="0" ref="SmarteCD" />
+				<xs:element minOccurs="0" ref="VideoCD" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Base">
+		<xs:complexType>
+			<xs:attribute name="Status" default="Trial">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Trial" />
+						<xs:enumeration value="Unlimited" />
+						<xs:enumeration value="Periodic" />
+						<xs:enumeration value="Expired" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DaysRemaining" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RawMode">
+		<xs:complexType>
+			<xs:attribute name="Status" default="Trial">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Trial" />
+						<xs:enumeration value="Unlimited" />
+						<xs:enumeration value="Periodic" />
+						<xs:enumeration value="Expired" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DaysRemaining" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SmarteCD">
+		<xs:complexType>
+			<xs:attribute name="Status" default="Trial">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Trial" />
+						<xs:enumeration value="Unlimited" />
+						<xs:enumeration value="Periodic" />
+						<xs:enumeration value="Expired" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DaysRemaining" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VideoCD">
+		<xs:complexType>
+			<xs:attribute name="Status" default="Trial">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Trial" />
+						<xs:enumeration value="Unlimited" />
+						<xs:enumeration value="Periodic" />
+						<xs:enumeration value="Expired" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DaysRemaining" />
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<!-- 'OrderList' is in reply to request for 'GetOrderList' -->
+	<xs:element name="OrderList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="ProductionOrder" />
+			</xs:sequence>
+			<xs:attribute name="Cluster" use="required" />
+			<xs:attribute name="NumberOfOrders" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ProductionOrder">
+		<xs:complexType>
+			<xs:attribute name="OrderId" use="required" />
+			<xs:attribute name="ClientId" use="required" />
+			<xs:attribute name="OrderType" default="Record">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Read" />
+						<xs:enumeration value="Record" />
+						<xs:enumeration value="Copy" />
+						<xs:enumeration value="Print" />
+						<xs:enumeration value="Destroy" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="OrderState" default="IN_PROCESS">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="IN_PROCESS" />
+						<xs:enumeration value="COMPLETED" />
+						<xs:enumeration value="CANCELLED" />
+						<xs:enumeration value="FAILED" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="OrderStage" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="WAITING" />
+						<xs:enumeration value="BUSY" />
+						<xs:enumeration value="DOWNLOADING" />
+						<xs:enumeration value="RECORDING" />
+						<xs:enumeration value="FIXATING" />
+						<xs:enumeration value="DESTROYING" />
+						<xs:enumeration value="PRINTING" />
+						<xs:enumeration value="MAPPING" />
+						<xs:enumeration value="READING" />
+						<xs:enumeration value="COMPLETED" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="OrderStageEx">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="SUSPENDING" />
+						<xs:enumeration value="SUSPENDED" />
+						<xs:enumeration value="CANCELLING" />
+						<xs:enumeration value="SEGMENT" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CopiesRequested" use="required" />
+			<xs:attribute name="CopiesCompleted" use="required" />
+			<xs:attribute name="PercentCompleted" use="required" />
+			<xs:attribute name="OriginalOrder" />
+		</xs:complexType>
+	</xs:element>
+	<!-- The	State:SEGMENT refers to a segment order that is waiting for next segment to process -->
+	<!--
+        The Stage:WAITING value occurs briefly when an order is first started.
+        It may also occur for an extended period if an order loses its resources due
+            to a hardware malfunction or during a crash recovery when there may be many
+            orders running, but not enough resources to run them all at once.
+    -->
+	<!-- The 'SessionLog' element is in the reply to the request to 'GetSessionLog' -->
+	<xs:element name="SessionLog">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Entry" />
+			</xs:sequence>
+			<xs:attribute name="NumberOfEntries" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Entry">
+		<xs:complexType>
+			<xs:attribute name="Text" use="required" />
+			<xs:attribute name="Timestamp" use="required" />
+			<xs:attribute name="MessageId" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Timestamp format = CCYY-MM-DD HH:MM:SS -->
+	<!-- MessageId is set to 0 if entry is an informational message. -->
+	<!-- 'DialogAction' is in the reply to the request for 'SetDialogAction' -->
+	<xs:element name="DialogAction">
+		<xs:complexType>
+			<xs:attribute name="DialogId" use="required" />
+			<xs:attribute name="Button" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="First" />
+						<xs:enumeration value="Second" />
+						<xs:enumeration value="Third" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Name" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- 'ProductionParameterSettings' is in the reply to the request 'GetParameterList' -->
+	<xs:element name="ProductionParameterSettings">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Server" />
+				<xs:element ref="Modes" />
+				<xs:element ref="Caching" />
+				<xs:element ref="Recording" />
+				<xs:element ref="Verify" />
+				<xs:element ref="Printing" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Autoloader" />
+				<xs:element ref="Reading" />
+				<xs:element ref="MediaCodes" />
+				<xs:element ref="KioskMode" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Server">
+		<xs:complexType>
+			<xs:attribute name="Description" />
+			<xs:attribute name="OrderStatusUpdateInterval" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Modes">
+		<xs:complexType>
+			<xs:attribute name="ServerMode" default="Attended">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Attended" />
+						<xs:enumeration value="UnAttended" />
+						<xs:enumeration value="Kiosk" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="OperatingMode" default="Normal">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Normal" />
+						<xs:enumeration value="BulkRead" />
+						<xs:enumeration value="JobStreaming" />
+						<xs:enumeration value="AutoBulkRead" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UseFIFOMode" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- 'UseFIFOMode' is a method of order sequencing -->
+	<xs:element name="Caching">
+		<xs:complexType>
+			<xs:attribute name="UseStaticCaching" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CacheDriveLetters" />
+		</xs:complexType>
+	</xs:element>
+	<!-- 'CacheDriveLetters' is a series of letters (c - z) -->
+	<xs:element name="Recording">
+		<xs:complexType>
+			<xs:attribute name="SimulateRecording" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UseNewMediaOnly" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MaxRecordingSpeed" use="required" />
+			<xs:attribute name="MaxDVDRecordingSpeed" use="required" />
+			<xs:attribute name="RejectNonISO" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DisableISOExtentFixups" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AddPostgapToISO" default="Disabled">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Disabled" />
+						<xs:enumeration value="Images" />
+						<xs:enumeration value="Discs" />
+						<xs:enumeration value="Both" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="EnableUsing90_100MinuteCDRs" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DestroyFailedRecordings" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- A value of 'Max' returned for 'MaxRecordingSpeed' means that the recorder's default maximum speed is used to record -->
+	<xs:element name="Verify">
+		<xs:complexType>
+			<xs:attribute name="UseVerify" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Frequency" use="required" />
+			<xs:attribute name="IsChecksumDLLReady" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UseChecksumDLL" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ChecksumDLLId" />
+		</xs:complexType>
+	</xs:element>
+	<!-- 'Frequency' value is the number, n; So that every nth disc is verified. -->
+	<!-- The IsChecksum DLLReady' and ChecksumDLLId' are both read-only parameters -->
+	<xs:element name="Printing">
+		<xs:complexType>
+			<xs:attribute name="SimulatePrinting" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="RejectPattern" default="Disabled">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Disabled" />
+						<xs:enumeration value="AllRejectedDiscs" />
+						<xs:enumeration value="RecordingFailuresOnly" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TakeOrdersWithLabelWithoutPrinter" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ErrorOnLowInkLevel" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="LowInkPercentage" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Autoloader">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="BinSetting" />
+			</xs:sequence>
+			<xs:attribute name="LoaderNumber" use="required" />
+			<xs:attribute name="MailslotSetting" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="OutputReject" />
+						<xs:enumeration value="Unused" />
+						<xs:enumeration value="NotPresent" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="ReservedOutput" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AvailableMailslotSettings" use="required" />
+			<xs:attribute name="MediaSize" default="120mm">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="120mm" />
+						<xs:enumeration value="80mm" />
+						<xs:enumeration value="63mm" />
+						<xs:enumeration value="61mm" />
+						<xs:enumeration value="58mm" />
+						<xs:enumeration value="59x85mm" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AvailableMediaSizes" use="required" />
+			<xs:attribute name="MediaType" default="CDR">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDR" />
+						<xs:enumeration value="DVDR" />
+						<xs:enumeration value="BOTH" />
+						<xs:enumeration value="DVDR-DL" />
+						<xs:enumeration value="COMBO" />
+						<xs:enumeration value="SOQ_CDR" />
+						<xs:enumeration value="SOQ_DVDR" />
+						<xs:enumeration value="SOQ_DVDR-DL" />
+						<xs:enumeration value="DVDR-HD" />
+						<xs:enumeration value="DVDR-BD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AvailableMediaTypes" default="CDR">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDR" />
+						<xs:enumeration value="DVDR" />
+						<xs:enumeration value="BOTH" />
+						<xs:enumeration value="CDR_OR_DVDR" />
+						<xs:enumeration value="NONE" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AvailableMediaTypes2" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Autoloader numbering begins with '1' -->
+	<!-- AvailableMailslotSettings is a comma separated list of MailslotSetting values -->
+	<!-- AvailableMediaSizes is a comma separated list of MediaSize values -->
+	<!-- AvailableMediaTypes2 is a comma separated list of the MediaType values "CDR","DVDR","DVDR-DL", and "COMBO". -->
+	<!-- MediaType value "BOTH" is equivalent to CDR and DVDR. It is DEPRECATED but retained for backward compatibility. -->
+	<!-- AvailableMediaTypes is DEPRECATED but retained for backward compatibility. New applications should no longer use it! -->
+	<xs:element name="BinSetting">
+		<xs:complexType>
+			<xs:attribute name="BinNumber" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="4" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Setting" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Input" />
+						<xs:enumeration value="InputOutput" />
+						<xs:enumeration value="CDRInputOnly" />
+						<xs:enumeration value="DVDRInputOnly" />
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="OutputReject" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="Collate" />
+						<xs:enumeration value="ReservedInput" />
+						<xs:enumeration value="DVDR-DLInputOnly" />
+						<xs:enumeration value="SOQ_CDRInputOnly" />
+						<xs:enumeration value="SOQ_DVDRInputOnly" />
+						<xs:enumeration value="SOQ_DVDR-DLInputOnly" />
+						<xs:enumeration value="DVDR-HDInputOnly" />
+						<xs:enumeration value="DVDR-BDInputOnly" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AvailableBinSettings" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- AvailableBinSettings is a comma separated list of 'Setting' values -->
+	<xs:element name="AutoBulkRead">
+		<xs:complexType>
+			<xs:attribute name="BaseFolderForImages" type="xs:string" use="required" />
+			<xs:attribute name="UseVolumeIDAsFolderName" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UseBarcodeAsFolderName" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ExtractISOImagesToFoldersAndFiles" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="ImageTypeForAudioTracks" default="PCM">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="PCM" />
+						<xs:enumeration value="WAV" />
+						<xs:enumeration value="DDP" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="UseISRCAsFilenameForAudioTracks" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PutFailuresToRejectBin" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The barcode rotation angle is returned as the number of .25 degree increments for offsets ranging from 0 to 359.75 degrees -->
+	<!-- The range of values is 0 - 1439 -->
+	<xs:element name="MediaCodes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="MediaCode" />
+			</xs:sequence>
+			<xs:attribute name="UseMediaCodes" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MediaCode">
+		<xs:complexType>
+			<xs:attribute name="Value" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- A MediaCode Value has the form "99m55s66f" -->
+	<xs:element name="KioskMode">
+		<xs:complexType>
+			<xs:attribute name="RecoverOrders" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="RunNoPrinter" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AutoloaderRecovery" default="Retry">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Retry" />
+						<xs:enumeration value="Exit" />
+						<xs:enumeration value="Disable" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PrinterRecovery" default="Retry">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Retry" />
+						<xs:enumeration value="Exit" />
+						<xs:enumeration value="Disable" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="AutoRespondOnStartup" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The attritubes of Kiosk mode are in effect only when the Mode of 'ServerMode' is set to 'Kiosk' -->
+	<!-- See notes in the ProductionServerRequest DTD about the KioskMode parameters -->
+	<!--
+        The UnlockingCodes element is sent in response to a GetUnlockingCodes request.
+        It is a part of the remote activation process.
+    -->
+	<xs:element name="UnlockingCodes">
+		<xs:complexType>
+			<xs:attribute name="Feature" default="Base">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Base" />
+						<xs:enumeration value="Smarte-CD" />
+						<xs:enumeration value="RawMode" />
+						<xs:enumeration value="EciVCD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SessionCode" use="required" />
+			<xs:attribute name="ComputerCode" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Reading">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AutoBulkRead" />
+			</xs:sequence>
+			<xs:attribute name="AudioReadSpeed" default="Max">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1x" />
+						<xs:enumeration value="2x" />
+						<xs:enumeration value="4x" />
+						<xs:enumeration value="8x" />
+						<xs:enumeration value="Max" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="PreferredReader" default="Recorders">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDDVD-ROMDrive" />
+						<xs:enumeration value="Recorders" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="BarcodePort" default="None">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="None" />
+						<xs:enumeration value="COM1" />
+						<xs:enumeration value="COM2" />
+						<xs:enumeration value="COM3" />
+						<xs:enumeration value="COM4" />
+						<xs:enumeration value="COM5" />
+						<xs:enumeration value="COM6" />
+						<xs:enumeration value="COM7" />
+						<xs:enumeration value="COM8" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="BarcodeAngle" use="required" />
+			<xs:attribute name="UseBarcodeIndex" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

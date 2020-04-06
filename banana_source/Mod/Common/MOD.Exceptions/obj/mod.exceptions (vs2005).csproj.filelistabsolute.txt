@@ -1,0 +1,5 @@
+C:\Work\Mod\Common\MOD.Exceptions\bin\Debug\MOD.Exceptions (VS2005).dll
+C:\Work\Mod\Common\MOD.Exceptions\bin\Debug\MOD.Exceptions (VS2005).pdb
+C:\Work\Mod\Common\MOD.Exceptions\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mod\Common\MOD.Exceptions\obj\Debug\MOD.Exceptions (VS2005).dll
+C:\Work\Mod\Common\MOD.Exceptions\obj\Debug\MOD.Exceptions (VS2005).pdb

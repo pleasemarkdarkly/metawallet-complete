@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD for ProductionServerConfiguration_1.2, July 13, 2004 -->
+<!--
+    Revisions:
+    Rev 1.1:
+      Nov 19, 2003 Burns - Added IsPasswordSet attribute to ServerInfo.
+      Dec 22, 2003 Burns - Added Offline attribute to Transporter, Recorder,
+        and Printer. Added SystemFolder attribute to ServerInfo.
+      Jan 06, 2004 Burns - Added NumberOfSlots attribute to Transporter:Mailslot element.
+        Changed Mailslot* to Mailslot? under Transporter.
+      Jan 12, 2004 Burns - Added LabelsRemaining attribute to Printer element.
+      Jan 13, 2004 Burns - Added OSVersion to ServerInfo. Added DiscCount ro Recorder and Printer.
+        Added MaxCD(DVD)RecordingSpeed to RecorderCapabilities.
+      Jan 26, 2004 Burns - Added SupportsSCP to ServerInfo.
+    Rev 1.2:
+      Jul 13, 2004 Burns - Added SoftwareSuiteVersion attribute to ServerInfo.
+      Sep 17, 2004 Burns - Added CanRecordDVDR-DL & CanDestroyDVDR-DL attributes to RecorderCapabilities.
+        Added DVDR-DL, and COMBO to TransporterCapabilities:MediaType. Added "DVDR-DL_Input" to Bin:Usage.
+      Jan 14, 2005 Burns - Added new recorder capabilities, new values for TransporterCapabilities:MediaType,
+        and new Bin:Usage values.
+      Jan 21, 2005 Burns - Added CanReadDVD-HD and CanReadDVD-BD to ReaderCapabilities.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="urn:ConvertedDTDs"
+	xmlns:c="urn:ConvertedDTDs" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+	<xs:element name="ProductionServerConfiguration" msdata:IsDataSet="true">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="c:ServerInfo" />
+				<xs:element maxOccurs="unbounded" ref="c:Transporter" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ServerInfo">
+		<xs:complexType>
+			<xs:attribute name="ID" use="required" />
+			<xs:attribute name="SoftwareVersion" use="required" />
+			<xs:attribute name="Description" />
+			<xs:attribute name="Hostname" use="required" />
+			<xs:attribute name="Cluster" use="required" />
+			<xs:attribute name="IsService" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="IsPasswordSet" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SystemFolder" use="required" />
+			<xs:attribute name="OSVersion" use="required" />
+			<xs:attribute name="SupportsSCP" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SoftwareSuiteVersion" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<!-- SupportsSCP means 'supports the XML Status and Control Protocol' -->
+	<xs:element name="Transporter">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="c:TransporterCapabilities" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="c:Bin" />
+				<xs:element minOccurs="0" ref="c:Mailslot" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="c:Recorder" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="c:Reader" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="c:Printer" />
+				<xs:element minOccurs="0" ref="c:BarcodeScanner" />
+			</xs:sequence>
+			<xs:attribute name="Type" use="required" />
+			<xs:attribute name="InquiryString" use="required" />
+			<xs:attribute name="Offline" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- The InquiryString is a device-generated description of itself -->
+	<xs:element name="TransporterCapabilities">
+		<xs:complexType>
+			<xs:attribute name="PerfectPrint" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MediaType" default="CDR">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="CDR" />
+						<xs:enumeration value="DVDR" />
+						<xs:enumeration value="BOTH" />
+						<xs:enumeration value="DVDR-DL" />
+						<xs:enumeration value="COMBO" />
+						<xs:enumeration value="SOQ_CDR" />
+						<xs:enumeration value="SOQ_DVDR" />
+						<xs:enumeration value="SOQ_DVDR-DL" />
+						<xs:enumeration value="DVDR-HD" />
+						<xs:enumeration value="DVDR-BD" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MediaSize" default="120mm">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="120mm" />
+						<xs:enumeration value="80mm" />
+						<xs:enumeration value="63mm" />
+						<xs:enumeration value="61mm" />
+						<xs:enumeration value="58mm" />
+						<xs:enumeration value="59x85mm" />
+						<xs:enumeration value="ANY" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- MediaType "BOTH" is equivalent to CDR_AND_DVDR. The old name is kept for backward compatibility. -->
+	<!-- MediaSize "ANY" applies to a manual transporter only -->
+	<xs:element name="Bin">
+		<xs:complexType>
+			<xs:attribute name="Usage" default="Input">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Input" />
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="Output_Reject" />
+						<xs:enumeration value="Collate" />
+						<xs:enumeration value="ReservedInput" />
+						<xs:enumeration value="CD_Input" />
+						<xs:enumeration value="DVD_Input" />
+						<xs:enumeration value="DVDR-DL_Input" />
+						<xs:enumeration value="SOQ_CDR_Input" />
+						<xs:enumeration value="SOQ_DVDR_Input" />
+						<xs:enumeration value="SOQ_DVDR-DL_Input" />
+						<xs:enumeration value="DVDR-HD_Input" />
+						<xs:enumeration value="DVDR-BD_Input" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Level" />
+		</xs:complexType>
+	</xs:element>
+	<!-- Bin Level indicates percent full -->
+	<xs:element name="Mailslot">
+		<xs:complexType>
+			<xs:attribute name="Usage" default="Unused">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Unused" />
+						<xs:enumeration value="Output" />
+						<xs:enumeration value="Reject" />
+						<xs:enumeration value="Output_Reject" />
+						<xs:enumeration value="ReservedOutput" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Level" />
+			<xs:attribute name="NumberOfSlots" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Recorder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="c:RecorderCapabilities" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="c:Cache" />
+			</xs:sequence>
+			<xs:attribute name="InquiryString" use="required" />
+			<xs:attribute name="Offline" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DiscCount" />
+		</xs:complexType>
+	</xs:element>
+	<!-- DiscCount is the total number of discs processed by the recorder. -->
+	<xs:element name="RecorderCapabilities">
+		<xs:complexType>
+			<xs:attribute name="CanRecordCD-R" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordDVD-R" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordDVDR-DL" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordPocketCD-R" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanDestroyCD-R" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanDestroyDVD-R" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanDestroyDVDR-DL" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanDestroyPocketCD-R" default="true">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordSOQ_CDR" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordSOQ_DVDR" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordSOQ_DVDR-DL" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordDVDR-HD" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanRecordDVDR-BD" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanDestroySOQ_CDR" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MaxCDRecordingSpeed" />
+			<xs:attribute name="MaxDVDRecordingSpeed" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Cache">
+		<xs:complexType>
+			<xs:attribute name="InquiryString" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Printer">
+		<xs:complexType>
+			<xs:attribute name="Type" use="required" />
+			<xs:attribute name="Ribbon" default="Color">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Mono" />
+						<xs:enumeration value="Color" />
+						<xs:enumeration value="CMY-White" />
+						<xs:enumeration value="Bi-color" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="InquiryString" use="required" />
+			<xs:attribute name="Offline" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="LabelsRemaining" />
+			<xs:attribute name="DiscCount" />
+		</xs:complexType>
+	</xs:element>
+	<!-- DiscCount is the total number of discs processed by the printer. -->
+	<xs:element name="BarcodeScanner">
+		<xs:complexType>
+			<xs:attribute name="InquiryString" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Reader">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="c:ReaderCapabilities">
+					<xs:attribute name="InquiryString" use="required" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ReaderCapabilities">
+		<xs:sequence>
+			<xs:element ref="c:ReaderCapabilities" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ReaderCapabilities">
+		<xs:complexType>
+			<xs:attribute name="CanReadDVD" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanReadDVD-HD" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CanReadDVD-BD" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true" />
+						<xs:enumeration value="false" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

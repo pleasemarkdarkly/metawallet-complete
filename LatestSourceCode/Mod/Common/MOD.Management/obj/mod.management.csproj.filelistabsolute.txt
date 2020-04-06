@@ -1,0 +1,5 @@
+C:\Work\Mod\Common\MOD.Management\bin\Debug\MOD.Management.dll
+C:\Work\Mod\Common\MOD.Management\bin\Debug\MOD.Management.pdb
+C:\Work\Mod\Common\MOD.Management\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mod\Common\MOD.Management\obj\Debug\MOD.Management.dll
+C:\Work\Mod\Common\MOD.Management\obj\Debug\MOD.Management.pdb
